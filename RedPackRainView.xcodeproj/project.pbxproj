@@ -178,7 +178,7 @@
 					};
 				};
 			};
-			buildConfigurationList = C209AB25207D9AE7007681AC /* Build configuration list for PBXProject "RedPackRain" */;
+			buildConfigurationList = C209AB25207D9AE7007681AC /* Build configuration list for PBXProject "RedPackRainView" */;
 			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -442,7 +442,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C209AB25207D9AE7007681AC /* Build configuration list for PBXProject "RedPackRain" */ = {
+		C209AB25207D9AE7007681AC /* Build configuration list for PBXProject "RedPackRainView" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C209AB45207D9AE8007681AC /* Debug */,
