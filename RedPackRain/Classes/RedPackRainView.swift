@@ -103,7 +103,7 @@ public class RedPackRainView: UIView {
             endRain()
             return
         }
-        print("红包 +1,倒计时 \(rest)s")
+//        print("红包 +1,倒计时 \(rest)s")
         timeCounter += 1
         show()
     }
