@@ -8,16 +8,16 @@
 
 import UIKit
 
-class RedPackRainView: UIView {
-    typealias ClickHandle = (RedPackRainView, UIView) -> Void
-    typealias CompleteHandle = (RedPackRainView) -> Void
+public class RedPackRainView: UIView {
+    public typealias ClickHandle = (RedPackRainView, UIView) -> Void
+    public typealias CompleteHandle = (RedPackRainView) -> Void
     
-    var timer:Timer = Timer.init()//定时器
-    var redPackAllCount = 0
-    var redPackClickedCount = 0
-    var redPackIntervalTime = 0.0
-    var redPackDropDownTime = 0.0
-    var totalTime = 0.0
+    public var timer:Timer = Timer.init()//定时器
+    public var redPackAllCount = 0
+    public var redPackClickedCount = 0
+    public var redPackIntervalTime = 0.0
+    public var redPackDropDownTime = 0.0
+    public var totalTime = 0.0
     
     private var redPackSize: CGSize?
     private var redPackImages: [UIImage]?
@@ -26,14 +26,14 @@ class RedPackRainView: UIView {
     private var completeHandle: CompleteHandle?
     private var timeCounter = 0
     // MARK: 初始化设置
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
                 let tap = UITapGestureRecognizer()
                 tap.addTarget(self, action: #selector(self.clicked))
                 self.addGestureRecognizer(tap)
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -47,7 +47,7 @@ class RedPackRainView: UIView {
     ///   - intervalTime: 红包间隔, 默认 0.5秒 一封
     ///   - totalTime: 总动画时间
     ///   - clickedHandle: 点击红包回调
-    func setRedPack(
+    public func setRedPack(
         images: [UIImage]?,
         size: CGSize? = nil,
         animationDuration: Double? = 1,
@@ -69,18 +69,18 @@ class RedPackRainView: UIView {
     /// 红包雨结束回调
     ///
     /// - Parameter completeHandle: 回调handle
-    func setCompleteHandle(completeHandle: @escaping CompleteHandle) {
+    public func setCompleteHandle(completeHandle: @escaping CompleteHandle) {
         self.completeHandle = completeHandle
     }
     
     // MARK: 动画
-    func beginToRain() {
+    public func beginToRain() {
         //防止timer重复添加
         self.timer.invalidate()
         self.timer =  Timer.scheduledTimer(timeInterval: redPackIntervalTime, target: self, selector: #selector(showRain), userInfo: "", repeats: true)
     }
     
-    func endRain() {
+    public func endRain() {
         self.timer.invalidate()
         //停止所有layer的动画
         for subview in subviews {
