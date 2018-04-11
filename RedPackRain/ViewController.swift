@@ -9,17 +9,26 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    let redPackRain = RedPackRainView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        self.view.addSubview(redPackRain)
+        redPackRain.frame = self.view.bounds
+        redPackRain.setRedPack(images:
+            [UIImage.init(named: "redpack1.jpeg")!,
+             UIImage.init(named: "redpack2.jpeg")!,
+             UIImage.init(named: "redpack3.jpeg")!]) { (redPackView, clickview) in
+                print("累计\(redPackView.redPackClickedCount)个红包")
+                clickview.removeFromSuperview()
+        }
+        redPackRain.setCompleteHandle { (redPackView) in
+            print("一共点中了\(redPackView.redPackClickedCount)个红包")
+        }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    override func viewDidAppear(_ animated: Bool) {
+        redPackRain.beginToRain()
     }
-
-
 }
 
