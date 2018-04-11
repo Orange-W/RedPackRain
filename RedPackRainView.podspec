@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
   s.description  = <<-DESC
                    DESC
 
-  s.homepage     = "http://EXAMPLE/RedPackRainView"
+  s.homepage     = "https://github.com/Orange-W/RedPackRain.git"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
@@ -52,7 +52,7 @@ Pod::Spec.new do |s|
   #  profile URL.
   #
 
-  s.author             = { "OrangeEven" => "gzwangchengzhi2016@corp.netease.com" }
+  s.author             = { "OrangeEven" => "495871401@163.com" }
   # Or just: s.author    = "OrangeEven"
   # s.authors            = { "OrangeEven" => "gzwangchengzhi2016@corp.netease.com" }
   # s.social_media_url   = "http://twitter.com/OrangeEven"
@@ -79,7 +79,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "http://EXAMPLE/RedPackRainView.git", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/Orange-W/RedPackRain.git", :tag => "#{s.version}" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
