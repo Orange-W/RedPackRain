@@ -3,11 +3,15 @@
 
 ![红包雨效果.gif](https://github.com/Orange-W/RedPackRain/blob/master/gif/RedPack.gif?raw=true)
 
-## pod引入
+
+
+## 项目接入
+
+#### pod接入
 
 使用`pod 'RedPackRainView'`即可, 必要时添加官方源 `source 'https://github.com/CocoaPods/Specs.git'`
 
-#### 简单设置
+#### 快速使用Demo
 
 ```swift
 import UIKit
@@ -42,7 +46,7 @@ class ViewController: UIViewController {
 
 
 
-### Api介绍
+## Api介绍
 
 #### 红包设置
 
