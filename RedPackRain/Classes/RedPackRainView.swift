@@ -45,14 +45,15 @@ public class RedPackRainView: UIView {
     ///   - size: 红包的图片大小,不设和图片等大
     ///   - animationDuration: 轮播间隔,默认 1秒
     ///   - intervalTime: 红包间隔, 默认 0.5秒 一封
+    ///   - dropDownTime: 红包落下时间, 默认 5秒落到底部
     ///   - totalTime: 总动画时间
     ///   - clickedHandle: 点击红包回调
     public func setRedPack(
         images: [UIImage]?,
         size: CGSize? = nil,
         animationDuration: Double? = 1,
-        intervalTime: Double = 0.1,
-        dropDownTime: Double = 2,
+        intervalTime: Double = 0.5,
+        dropDownTime: Double = 5,
         totalTime: Double = 30,
         clickedHandle: ClickHandle? = nil
         ) {

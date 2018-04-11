@@ -58,17 +58,17 @@ class ViewController: UIViewController {
     ///   - size: 红包的图片大小,不设和图片等大
     ///   - animationDuration: 轮播间隔,默认 1秒
     ///   - intervalTime: 红包间隔, 默认 0.5秒 一封
-    ///   - totalTime: 总动画时间
+    ///   - dropDownTime: 红包落下时间, 默认 5秒落到底部
+    ///   - totalTime: 总动画时间, 默认持续 30秒
     ///   - clickedHandle: 点击红包回调
     public func setRedPack(
-        images: [UIImage]?,
-        size: CGSize? = nil,
-        animationDuration: Double? = 1,
-        intervalTime: Double = 0.1,
-        dropDownTime: Double = 2,
-        totalTime: Double = 30,
-        clickedHandle: ClickHandle? = nil
-        )
+        images: [UIImage]?, 
+        size: CGSize? = default, 
+        animationDuration: Double? = default, 
+        intervalTime: Double = default, 
+        dropDownTime: Double = default, 
+        totalTime: Double = default, 
+        clickedHandle: RedPackRainView.RedPackRainView.ClickHandle? = default)
 ```
 
 ### 红包雨结束时候的回调
