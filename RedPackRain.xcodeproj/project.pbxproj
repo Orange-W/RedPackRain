@@ -87,6 +87,7 @@
 		C209AB2C207D9AE7007681AC /* RedPackRain */ = {
 			isa = PBXGroup;
 			children = (
+				C215AFA0207DE0AA00F07EDF /* Classes */,
 				C215AF9E207DA96E00F07EDF /* redpack3.jpeg */,
 				C215AF9C207DA96A00F07EDF /* redpack1.jpeg */,
 				C215AF9A207DA96600F07EDF /* redpack2.jpeg */,
@@ -97,7 +98,6 @@
 				C209AB34207D9AE7007681AC /* Assets.xcassets */,
 				C209AB36207D9AE7007681AC /* LaunchScreen.storyboard */,
 				C209AB39207D9AE7007681AC /* Info.plist */,
-				C209AB4D207D9B02007681AC /* RedPackRainView.swift */,
 			);
 			path = RedPackRain;
 			sourceTree = "<group>";
@@ -109,6 +109,14 @@
 				C209AB44207D9AE8007681AC /* Info.plist */,
 			);
 			path = RedPackRainUITests;
+			sourceTree = "<group>";
+		};
+		C215AFA0207DE0AA00F07EDF /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				C209AB4D207D9B02007681AC /* RedPackRainView.swift */,
+			);
+			path = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
