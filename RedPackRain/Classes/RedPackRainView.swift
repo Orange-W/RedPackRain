@@ -11,12 +11,17 @@ import UIKit
 public class RedPackRainView: UIView {
     public typealias ClickHandle = (RedPackRainView, UIView) -> Void
     public typealias CompleteHandle = (RedPackRainView) -> Void
-    
-    public var timer:Timer = Timer.init()//定时器
-    public var redPackAllCount = 0
-    public var redPackClickedCount = 0
+    /// 定时器
+    public var timer:Timer = Timer.init()
+    /// 红包总数
+    public private(set) var redPackAllCount = 0
+    /// 点中的红包数
+    public private(set) var redPackClickedCount = 0
+    /// 发红包间隔时间
     public var redPackIntervalTime = 0.0
+    /// 红包下落速度,到底部时间
     public var redPackDropDownTime = 0.0
+    /// 红包雨持续时间
     public var totalTime = 0.0
     
     private var redPackSize: CGSize?
