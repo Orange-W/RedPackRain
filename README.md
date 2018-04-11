@@ -1,7 +1,7 @@
 # RedPackRain
 红包雨组件, 可自行配置图片, 持续时间, 结束总时间。
 
-![红包雨](/Users/Orange/Downloads/%E7%BA%A2%E5%8C%85%E9%9B%A8.gif)
+![红包雨效果.gif](https://upload-images.jianshu.io/upload_images/6837136-b645faa51668aedf.gif?imageMogr2/auto-orient/strip)
 
 ## pod引入
 
