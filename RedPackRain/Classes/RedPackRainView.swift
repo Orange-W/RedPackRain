@@ -186,11 +186,11 @@ public class RedPackRainView: UIView {
         moveAnimation.repeatCount = 1
         //动画的速度
         moveAnimation.timingFunction = CAMediaTimingFunction.init(name: kCAMediaTimingFunctionLinear)
-//        CATransaction.setCompletionBlock {
-//            if let yIndex = imageView.layer.presentation()?.frame.origin.y, yIndex > self.frame.height {
-//                imageView.removeFromSuperview()
-//            }
-//        }
+        CATransaction.setCompletionBlock {
+            if let yIndex = imageView.layer.presentation()?.frame.origin.y, yIndex > self.frame.height {
+                imageView.removeFromSuperview()
+            }
+        }
         moveLayer.add(moveAnimation, forKey: "move")
     }
 
@@ -199,10 +199,11 @@ public class RedPackRainView: UIView {
         let views = self.subviews
         // 倒序, 从最上层view找起
         for viewTuple in views.enumerated().reversed() {
+            // 销毁界面外的红包
             if let yIndex = viewTuple.element.layer.presentation()?.frame.origin.y, yIndex > self.frame.height || yIndex < -(viewTuple.element.frame.size.height + viewTuple.element.frame.size.width)/4 {
                 viewTuple.element.removeFromSuperview()
             }
-
+            // 判断界面内的红包的点击事件
             if viewTuple.element.layer.presentation()?
                 .hitTest(touchPoint) != nil {
                 if viewTuple.element.tag == redPackCompomentTag {
