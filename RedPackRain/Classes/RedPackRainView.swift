@@ -64,6 +64,10 @@ public class RedPackRainView: UIView {
     ///   - dropDownTime: 红包落下时间, 默认 5秒落到底部
     ///   - totalTime: 总动画时间
     ///   - clickedHandle: 点击红包回调
+    /// 如果想改变轮播图片, 需要先停止播放,再改变播放
+    /// imgView.stopAnimating()
+    /// imgView.animationImages =  [...]
+    /// imgView.startAnimating()
     public func setRedPack(
         images: [UIImage]?,
         size: CGSize? = nil,
@@ -146,11 +150,11 @@ public class RedPackRainView: UIView {
         let imageView = UIImageView.init()
         imageView.tag = redPackCompomentTag
         imageView.image = redPackImages?.first
-        imageView.animationImages = redPackImages
         imageView.isUserInteractionEnabled = true
         if let duration = redPackAnimationDuration {
             imageView.animationDuration = duration
         }
+        imageView.animationImages = redPackImages
         imageView.startAnimating()
         imageView.frame = CGRect.init(origin: CGPoint.zero, size: size)
         if redPackSize == nil {
@@ -175,7 +179,7 @@ public class RedPackRainView: UIView {
         //此处keyPath为CALayer的属性
         let  moveAnimation:CAKeyframeAnimation = CAKeyframeAnimation(keyPath:"position")
         //动画路线，一个数组里有多个轨迹点
-        moveAnimation.values = [NSValue(cgPoint: CGPoint(x: CGFloat(Float(arc4random_uniform(UInt32(self.frame.width)))), y: -imageView.frame.height)),NSValue(cgPoint: CGPoint(x:CGFloat(Float(arc4random_uniform(UInt32(self.frame.width)))), y: self.frame.height))]
+        moveAnimation.values = [NSValue(cgPoint: CGPoint(x: CGFloat(Float(arc4random_uniform(UInt32(frame.width)))), y: -imageView.frame.height)),NSValue(cgPoint: CGPoint(x:CGFloat(Float(arc4random_uniform(UInt32(frame.width)))), y: frame.height+10))]
         //动画间隔
         moveAnimation.duration = redPackDropDownTime
         //重复次数
@@ -183,7 +187,9 @@ public class RedPackRainView: UIView {
         //动画的速度
         moveAnimation.timingFunction = CAMediaTimingFunction.init(name: kCAMediaTimingFunctionLinear)
         CATransaction.setCompletionBlock {
-            imageView.removeFromSuperview()
+            if let yIndex = imageView.layer.presentation()?.frame.origin.y, yIndex > self.frame.height {
+                imageView.removeFromSuperview()
+            }
         }
         moveLayer.add(moveAnimation, forKey: "move")
     }
