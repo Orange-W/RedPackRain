@@ -27,6 +27,8 @@ public class RedPackRainView: UIView {
     /// 红包雨持续时间
     public var totalTime = 0.0
 
+    /// 是否开启点击穿透, 点击效果可以穿透上层的遮挡物
+    var clickPenetrateEnable = false
     public let redPackCompomentTag = -999
 
     
@@ -171,13 +173,21 @@ public class RedPackRainView: UIView {
     @objc func clicked(tapgesture: UITapGestureRecognizer) {
         let touchPoint = tapgesture.location(in: self)
         let views = self.subviews
-        for viewTuple in views.enumerated() {
+        // 倒序, 从最上层view找起
+        for viewTuple in views.enumerated().reversed() {
             if viewTuple.element.layer.presentation()?
-                .hitTest(touchPoint) != nil &&
-                viewTuple.element.tag == redPackCompomentTag {
-                redPackClickedCount += 1
-                clickHandle?(self, viewTuple.element)
-                return
+                .hitTest(touchPoint) != nil {
+                if viewTuple.element.tag == redPackCompomentTag {
+                    // 点到的是红包,马上结束
+                    redPackClickedCount += 1
+                    clickHandle?(self, viewTuple.element)
+                    return
+                } else {
+                    // 没开启点击穿透,不让点
+                    if !clickPenetrateEnable {
+                        return
+                    }
+                }
             }
         }
     }
