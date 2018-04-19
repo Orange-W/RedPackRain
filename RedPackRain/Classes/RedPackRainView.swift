@@ -160,6 +160,7 @@ public class RedPackRainView: UIView {
                 viewTuple.element.tag == redPackCompomentTag {
                 redPackClickedCount += 1
                 clickHandle?(self, viewTuple.element)
+                return
             }
         }
     }
