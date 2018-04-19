@@ -93,7 +93,7 @@ public class RedPackRainView: UIView {
     /// 红包出现的回调
     ///
     /// - Parameter completeHandle: 回调handle
-    public func setAppearHandle(handle: @escaping RedPackAppearHandle) {
+    public func setRedPackAppearHandle(handle: @escaping RedPackAppearHandle) {
         self.redPackAppearHandle = handle
     }
 
