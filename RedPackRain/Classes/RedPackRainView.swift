@@ -23,6 +23,9 @@ public class RedPackRainView: UIView {
     public var redPackDropDownTime = 0.0
     /// 红包雨持续时间
     public var totalTime = 0.0
+
+    public let redPackCompomentTag = -999
+
     
     private var redPackSize: CGSize?
     private var redPackImages: [UIImage]?
@@ -112,6 +115,7 @@ public class RedPackRainView: UIView {
         let size = redPackSize ?? CGSize.init(width: 50, height: 50)
         //创建画布
         let imageView = UIImageView.init()
+        imageView.tag = redPackCompomentTag
         imageView.image = redPackImages?.first
         imageView.animationImages = redPackImages
         imageView.isUserInteractionEnabled = true
@@ -121,7 +125,7 @@ public class RedPackRainView: UIView {
         imageView.startAnimating()
         imageView.frame = CGRect.init(origin: CGPoint.zero, size: size)
         imageView.frame.origin.y =  -size.height
-        self.addSubview(imageView)
+        self.insertSubview(imageView, at: 0)
         redPackAllCount += 1
         //画布动画
         addAnimation(imageView: imageView)
@@ -151,7 +155,9 @@ public class RedPackRainView: UIView {
         let touchPoint = tapgesture.location(in: self)
         let views = self.subviews
         for viewTuple in views.enumerated() {
-            if viewTuple.element.layer.presentation()?.hitTest(touchPoint) != nil {
+            if viewTuple.element.layer.presentation()?
+                .hitTest(touchPoint) != nil &&
+                viewTuple.element.tag == redPackCompomentTag {
                 redPackClickedCount += 1
                 clickHandle?(self, viewTuple.element)
             }
