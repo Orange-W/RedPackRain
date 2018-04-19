@@ -28,7 +28,7 @@ public class RedPackRainView: UIView {
     public var totalTime = 0.0
 
     /// 是否开启点击穿透, 点击效果可以穿透上层的遮挡物
-    var clickPenetrateEnable = false
+    public var clickPenetrateEnable = false
     public let notPenetrateTag = -1001
     public let redPackCompomentTag = -999
 
