@@ -29,7 +29,9 @@ public class RedPackRainView: UIView {
 
     /// 是否开启点击穿透, 点击效果可以穿透上层的遮挡物
     var clickPenetrateEnable = false
+    public let notPenetrateTag = -1001
     public let redPackCompomentTag = -999
+
 
     
     private var redPackSize: CGSize?
@@ -95,6 +97,19 @@ public class RedPackRainView: UIView {
         self.redPackAppearHandle = handle
     }
 
+
+    /// 设置点击不会穿透的view
+    /// 配合clickPenetrateEnable 属性使用，属性为false则不会执行任何操作。
+    /// 注意：会改变 view 的 tag 值
+    /// - Parameter views: 不想点击被穿透的 view 数组
+    public func addNotPenetrateViews(views:[UIView]) {
+        if clickPenetrateEnable {
+            for view in views {
+                view.tag = notPenetrateTag
+            }
+        }
+
+    }
     
     // MARK: 动画
     public func beginToRain() {
@@ -168,8 +183,7 @@ public class RedPackRainView: UIView {
         }
         moveLayer.add(moveAnimation, forKey: "move")
     }
-    
-    
+
     @objc func clicked(tapgesture: UITapGestureRecognizer) {
         let touchPoint = tapgesture.location(in: self)
         let views = self.subviews
@@ -177,14 +191,15 @@ public class RedPackRainView: UIView {
         for viewTuple in views.enumerated().reversed() {
             if viewTuple.element.layer.presentation()?
                 .hitTest(touchPoint) != nil {
+
                 if viewTuple.element.tag == redPackCompomentTag {
                     // 点到的是红包,马上结束
                     redPackClickedCount += 1
                     clickHandle?(self, viewTuple.element)
                     return
                 } else {
-                    // 没开启点击穿透,不让点
-                    if !clickPenetrateEnable {
+                    // 没开启点击穿透 或 点击 view 在不穿透列表中，则阻断点击
+                    if !clickPenetrateEnable || viewTuple.element.tag == notPenetrateTag {
                         return
                     }
                 }
