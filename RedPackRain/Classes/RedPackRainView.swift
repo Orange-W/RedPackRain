@@ -153,7 +153,7 @@ public class RedPackRainView: UIView {
         }
         imageView.startAnimating()
         imageView.frame = CGRect.init(origin: CGPoint.zero, size: size)
-        imageView.frame.origin.y =  -size.height
+        imageView.frame.origin.y =  -max(size.height, size.width)-10
         self.insertSubview(imageView, at: 0)
         redPackAllCount += 1
         //画布动画
