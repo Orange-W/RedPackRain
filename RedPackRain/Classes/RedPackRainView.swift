@@ -153,6 +153,10 @@ public class RedPackRainView: UIView {
         }
         imageView.startAnimating()
         imageView.frame = CGRect.init(origin: CGPoint.zero, size: size)
+        if redPackSize == nil {
+            imageView.sizeToFit()
+        }
+
         imageView.frame.origin = CGPoint(x: -max(size.height, size.width), y: -max(size.height, size.width))
         self.insertSubview(imageView, at: 0)
         redPackAllCount += 1
