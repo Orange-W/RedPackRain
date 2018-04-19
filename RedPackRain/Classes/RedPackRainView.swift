@@ -11,6 +11,9 @@ import UIKit
 public class RedPackRainView: UIView {
     public typealias ClickHandle = (RedPackRainView, UIView) -> Void
     public typealias CompleteHandle = (RedPackRainView) -> Void
+    public typealias RedPackAppearHandle = (UIImageView, Int) -> Void
+
+
     /// 定时器
     public var timer:Timer = Timer.init()
     /// 红包总数
@@ -32,6 +35,7 @@ public class RedPackRainView: UIView {
     private var redPackAnimationDuration: Double?
     private var clickHandle: ClickHandle?
     private var completeHandle: CompleteHandle?
+    private var redPackAppearHandle: RedPackAppearHandle?
     private var timeCounter = 0
     // MARK: 初始化设置
     public override init(frame: CGRect) {
@@ -78,9 +82,17 @@ public class RedPackRainView: UIView {
     /// 红包雨结束回调
     ///
     /// - Parameter completeHandle: 回调handle
-    public func setCompleteHandle(completeHandle: @escaping CompleteHandle) {
-        self.completeHandle = completeHandle
+    public func setCompleteHandle(handle: @escaping CompleteHandle) {
+        self.completeHandle = handle
     }
+
+    /// 红包出现的回调
+    ///
+    /// - Parameter completeHandle: 回调handle
+    public func setAppearHandle(handle: @escaping RedPackAppearHandle) {
+        self.redPackAppearHandle = handle
+    }
+
     
     // MARK: 动画
     public func beginToRain() {
@@ -106,7 +118,7 @@ public class RedPackRainView: UIView {
             endRain()
             return
         }
-//        print("红包 +1,倒计时 \(rest)s")
+
         timeCounter += 1
         show()
     }
@@ -129,8 +141,13 @@ public class RedPackRainView: UIView {
         redPackAllCount += 1
         //画布动画
         addAnimation(imageView: imageView)
+        redPackDidAppear(redPack: imageView)
     }
-    
+
+    private func redPackDidAppear(redPack: UIImageView) {
+        redPackAppearHandle?(redPack, redPackAllCount)
+    }
+
     //给画布添加动画
     func addAnimation(imageView: UIImageView) {
         let moveLayer = imageView.layer
