@@ -187,8 +187,12 @@ public class RedPackRainView: UIView {
         moveAnimation.timingFunction = CAMediaTimingFunction.init(name: kCAMediaTimingFunctionLinear)
         // 动画结束在视野外, 则销毁
         CATransaction.setCompletionBlock {
-            if let yIndex = imageView.layer.presentation()?.frame.origin.y, yIndex > self.frame.height {
-                imageView.removeFromSuperview()
+            if let frame = imageView.layer.presentation()?.frame {
+                let x = frame.origin.x
+                let y = frame.origin.y
+                if y > frame.height || x<0 || y< 0 {
+                    imageView.removeFromSuperview()
+                }
             }
         }
         moveLayer.add(moveAnimation, forKey: "move")
