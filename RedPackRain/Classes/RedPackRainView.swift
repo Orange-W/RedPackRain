@@ -10,10 +10,14 @@ import UIKit
 
 public class RedPackRainView: UIView {
     public typealias ClickHandle = (RedPackRainView, UIView) -> Void
-    public typealias CompleteHandle = (RedPackRainView) -> Void
+    public typealias BombClickHandle = (RedPackRainView, UIView) -> Void
+
     public typealias RedPackAppearHandle = (UIImageView, Int) -> Void
+    public typealias BombAppearHandle = (UIImageView, Int) -> Void
 
+    public typealias CompleteHandle = (RedPackRainView) -> Void
 
+    // MARK: - 红包
     /// 红包view列表
     public var redPackList: [UIImageView] = []
     /// 定时器
@@ -51,17 +55,27 @@ public class RedPackRainView: UIView {
     public var clickPenetrateEnable = false
     public let notPenetrateTag = -1001
     public let redPackCompomentTag = -999
+    public let bombCompomentTag = -1000
 
 
     private var runShowCount = 0 // 执行计数器
     private var redPackSize: CGSize?
-    private var redPackImages: [UIImage]?
+    private var redPackImages: [UIImage] = []
     private var redPackAnimationDuration: Double?
+    private var timeCounter = 0
+
     private var clickHandle: ClickHandle?
     private var completeHandle: CompleteHandle?
     private var redPackAppearHandle: RedPackAppearHandle?
-    private var timeCounter = 0
 
+    // MARK: - 炸弹
+    /// 炸弹密度,每10个红包一个炸弹
+    public var bombList: [UIImageView] = []
+    public var bombDensity = 0
+    public var bombAllCount = 0 // 执行计数器
+    private var bombClickHandle: BombClickHandle? = nil
+    private var bombImages: [UIImage] = []
+    private var bombAppearHandle: BombAppearHandle?
 
     // MARK: 初始化设置
     public override init(frame: CGRect) {
@@ -74,7 +88,25 @@ public class RedPackRainView: UIView {
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    // MARK: 启动函数
+    public func beginToRain() {
+        //防止timer重复添加
+        self.timer.invalidate()
+        self.timer =  Timer.scheduledTimer(timeInterval: minRedPackIntervalTime, target: self, selector: #selector(showRain), userInfo: "", repeats: true)
+    }
+
+    public func endRain() {
+        self.timer.invalidate()
+        //停止所有layer的动画
+        for subview in subviews {
+            subview.layer.removeAllAnimations()
+            subview.removeFromSuperview()
+        }
+        completeHandle?(self)
+    }
+
+    // MARK: 初始化设置
     
     /// 红包设置
     ///
@@ -91,7 +123,7 @@ public class RedPackRainView: UIView {
     /// imgView.animationImages =  [...]
     /// imgView.startAnimating()
     public func setRedPack(
-        images: [UIImage]?,
+        images: [UIImage],
         size: CGSize? = nil,
         animationDuration: Double? = 1,
         intervalTime: Double = 0.5,
@@ -108,8 +140,20 @@ public class RedPackRainView: UIView {
         self.clickHandle = clickedHandle
     }
     
-    
-    /// 红包雨结束回调
+    /// 炸弹设置
+    ///
+    /// - Parameters:
+    ///   - images: 炸弹图片集
+    ///   - density: 密度,每x个红包就出现个炸弹
+    ///   - clickHandle: 点击回调
+    func setBomb(images: [UIImage], density: Int, clickHandle: @escaping BombClickHandle) {
+        bombClickHandle = clickHandle
+        bombDensity = density
+        bombImages = images
+    }
+
+
+    /// 红包雨结束总回调
     ///
     /// - Parameter completeHandle: 回调handle
     public func setCompleteHandle(handle: @escaping CompleteHandle) {
@@ -123,8 +167,15 @@ public class RedPackRainView: UIView {
         self.redPackAppearHandle = handle
     }
 
+    /// 炸弹出现的回调
+    ///
+    /// - Parameter completeHandle: 回调handle
+    public func setBombAppearHandle(handle: @escaping BombAppearHandle) {
+        self.bombAppearHandle = handle
+    }
 
-    /// 设置点击不会穿透的view
+
+    /// 添加点击不会穿透的view
     /// 配合clickPenetrateEnable 属性使用，属性为false则不会执行任何操作。
     /// 注意：会改变 view 的 tag 值
     /// - Parameter views: 不想点击被穿透的 view 数组
@@ -137,23 +188,6 @@ public class RedPackRainView: UIView {
 
     }
     
-    // MARK: 动画
-    public func beginToRain() {
-        //防止timer重复添加
-        self.timer.invalidate()
-        self.timer =  Timer.scheduledTimer(timeInterval: minRedPackIntervalTime, target: self, selector: #selector(showRain), userInfo: "", repeats: true)
-    }
-    
-    public func endRain() {
-        self.timer.invalidate()
-        //停止所有layer的动画
-        for subview in subviews {
-            subview.layer.removeAllAnimations()
-            subview.removeFromSuperview()
-        }
-        completeHandle?(self)
-    }
-    
     // MARK: 私有方法
     @objc private func showRain() {
         runShowCount += 1
@@ -163,7 +197,7 @@ public class RedPackRainView: UIView {
         }
         runTimeTotal += redPackIntervalTime // 执行时间
         runShowCount = 0 // 重置计数
-        removeRedPack()
+        clearScreen()
         let rest = totalTime - runTimeTotal
         guard  rest > 0 else {
             endRain()
@@ -174,34 +208,106 @@ public class RedPackRainView: UIView {
         show()
     }
 
-    private func removeRedPack() {
+    // 清屏, 把视野外的view去掉
+    private func clearScreen() {
+        // 红包
         for repack in redPackList {
-
-            if let repackAniFrame = repack.layer.presentation()?.frame, repackAniFrame.isEmpty
-                || repackAniFrame.isNull
-                || !CGRect(x: frame.origin.x, y: frame.origin.y - repackAniFrame.height, width: frame.width, height: frame.height + repackAniFrame.height).intersects(repackAniFrame)  {
-
-                repack.removeFromSuperview()
-            }
-
+            removeCompoment(compoment: repack)
             if let index = redPackList.index(of: repack),
                 repack.superview == nil {
                 redPackList.remove(at: index)
             }
         }
+        // 炸弹
+        for bomb in bombList {
+            removeCompoment(compoment: bomb)
+            if let index = bombList.index(of: bomb),
+                bomb.superview == nil {
+                bombList.remove(at: index)
+            }
+        }
     }
 
     private func show() {
+        // 红包
+        let redPack = addRedPack()
+        redPackAllCount += 1
+        addAnimation(imageView: redPack)
+        redPackList.append(redPack)
+        redPackDidAppear(redPack: redPack)
+
+        // 如果设了炸弹
+        if bombDensity > 0 && redPackAllCount % bombDensity == 0{
+            let bomb = addBomb()
+            bombAllCount += 1
+            addAnimation(imageView: bomb)
+            bombList.append(bomb)
+            bombDidAppear(bomb: bomb)
+        }
+
+    }
+
+    // MARK: 生命周期
+    /// 红包出现回调
+    private func redPackDidAppear(redPack: UIImageView) {
+        redPackAppearHandle?(redPack, redPackAllCount)
+    }
+
+    /// 炸弹出现回调
+    private func bombDidAppear(bomb: UIImageView) {
+        bombAppearHandle?(bomb, bombAllCount)
+    }
+
+    /// 点击事件
+    @objc func clicked(tapgesture: UITapGestureRecognizer) {
+        let touchPoint = tapgesture.location(in: self)
+        let views = self.subviews
+        // 倒序, 从最上层view找起
+        for viewTuple in views.enumerated().reversed() {
+            // 判断界面内的红包的点击事件
+            if viewTuple.element.layer.presentation()?
+                .hitTest(touchPoint) != nil {
+                if viewTuple.element.tag == redPackCompomentTag {
+                    // 点到的是红包,马上结束
+                    redPackClickedCount += 1
+                    clickHandle?(self, viewTuple.element)
+                    return
+                } else if viewTuple.element.tag == bombCompomentTag {
+                    // 如果是炸弹
+                    bombClickHandle?(self, viewTuple.element)
+                } else {
+                    // 没开启点击穿透 或 点击 view 在不穿透列表中，则阻断点击
+                    if !clickPenetrateEnable || viewTuple.element.tag == notPenetrateTag {
+                        return
+                    }
+                }
+            }
+        }
+    }
+
+    // MARK: 辅助函数
+    private func addRedPack() -> UIImageView {
+        let redPack = buildImageView(images: redPackImages)
+        redPack.tag = redPackCompomentTag
+        return redPack
+    }
+
+    func addBomb() -> UIImageView {
+        let bomb = buildImageView(images: bombImages)
+        bomb.tag = bombCompomentTag
+        return bomb
+    }
+
+    private func buildImageView(images: [UIImage]) -> UIImageView {
         let size = redPackSize ?? CGSize.init(width: 50, height: 50)
         //创建画布
         let imageView = UIImageView.init()
-        imageView.tag = redPackCompomentTag
-        imageView.image = redPackImages?.first
+        imageView.image = images.first
         imageView.isUserInteractionEnabled = true
         if let duration = redPackAnimationDuration {
             imageView.animationDuration = duration
         }
-        imageView.animationImages = redPackImages
+        imageView.animationImages = images
         imageView.startAnimating()
 
         if redPackSize == nil {
@@ -212,15 +318,7 @@ public class RedPackRainView: UIView {
         let hidenDistance = max(imageView.frame.size.height, imageView.frame.size.width) * 2
         imageView.frame.origin = CGPoint(x: -hidenDistance, y: -hidenDistance)
         self.insertSubview(imageView, at: 0)
-        redPackAllCount += 1
-        //画布动画
-        addAnimation(imageView: imageView)
-        redPackList.append(imageView)
-        redPackDidAppear(redPack: imageView)
-    }
-
-    private func redPackDidAppear(redPack: UIImageView) {
-        redPackAppearHandle?(redPack, redPackAllCount)
+        return imageView
     }
 
     func addAnimation(imageView: UIImageView) {
@@ -238,26 +336,13 @@ public class RedPackRainView: UIView {
         moveLayer.add(moveAnimation, forKey: "move")
     }
 
-    @objc func clicked(tapgesture: UITapGestureRecognizer) {
-        let touchPoint = tapgesture.location(in: self)
-        let views = self.subviews
-        // 倒序, 从最上层view找起
-        for viewTuple in views.enumerated().reversed() {
-            // 判断界面内的红包的点击事件
-            if viewTuple.element.layer.presentation()?
-                .hitTest(touchPoint) != nil {
-                if viewTuple.element.tag == redPackCompomentTag {
-                    // 点到的是红包,马上结束
-                    redPackClickedCount += 1
-                    clickHandle?(self, viewTuple.element)
-                    return
-                } else {
-                    // 没开启点击穿透 或 点击 view 在不穿透列表中，则阻断点击
-                    if !clickPenetrateEnable || viewTuple.element.tag == notPenetrateTag {
-                        return
-                    }
-                }
-            }
+    private func removeCompoment(compoment: UIImageView) {
+        if let aniFrame = compoment.layer.presentation()?.frame,
+            aniFrame.isEmpty ||
+            aniFrame.isNull ||
+            !CGRect(x: frame.origin.x, y: frame.origin.y - aniFrame.height, width: frame.width, height: frame.height + aniFrame.height).intersects(aniFrame)  {
+            compoment.removeFromSuperview()
         }
+
     }
 }
