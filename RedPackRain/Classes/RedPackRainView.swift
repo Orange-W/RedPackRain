@@ -190,7 +190,7 @@ public class RedPackRainView: UIView {
             if let frame = imageView.layer.presentation()?.frame {
                 let x = frame.origin.x
                 let y = frame.origin.y
-                if y > frame.height || x<0 || y< 0 {
+                if y > frame.height || x<0 || y < 0 {
                     imageView.removeFromSuperview()
                 }
             }
