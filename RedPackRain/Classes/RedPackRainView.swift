@@ -73,9 +73,10 @@ public class RedPackRainView: UIView {
     public var bombList: [UIImageView] = []
     public var bombDensity = 0
     public var bombAllCount = 0 // 执行计数器
-    private var bombClickHandle: BombClickHandle? = nil
+    private var bombSize: CGSize? // 图片大小
     private var bombImages: [UIImage] = []
     private var bombAppearHandle: BombAppearHandle?
+    private var bombClickHandle: BombClickHandle? = nil
 
     // MARK: 初始化设置
     public override init(frame: CGRect) {
@@ -146,10 +147,14 @@ public class RedPackRainView: UIView {
     ///   - images: 炸弹图片集
     ///   - density: 密度,每x个红包就出现个炸弹
     ///   - clickHandle: 点击回调
-    public func setBomb(images: [UIImage], density: Int, clickHandle: @escaping BombClickHandle) {
+    public func setBomb(images: [UIImage],
+                        size: CGSize? = nil,
+                        density: Int,
+                        clickHandle: @escaping BombClickHandle) {
         bombClickHandle = clickHandle
         bombDensity = density
         bombImages = images
+        bombSize = size
     }
 
 
@@ -287,19 +292,18 @@ public class RedPackRainView: UIView {
 
     // MARK: 辅助函数
     private func addRedPack() -> UIImageView {
-        let redPack = buildImageView(images: redPackImages)
+        let redPack = buildImageView(images: redPackImages, size: redPackSize)
         redPack.tag = redPackCompomentTag
         return redPack
     }
 
     func addBomb() -> UIImageView {
-        let bomb = buildImageView(images: bombImages)
+        let bomb = buildImageView(images: bombImages, size: bombSize)
         bomb.tag = bombCompomentTag
         return bomb
     }
 
-    private func buildImageView(images: [UIImage]) -> UIImageView {
-        let size = redPackSize ?? CGSize.init(width: 50, height: 50)
+    private func buildImageView(images: [UIImage], size: CGSize?) -> UIImageView {
         //创建画布
         let imageView = UIImageView.init()
         imageView.image = images.first
@@ -310,10 +314,10 @@ public class RedPackRainView: UIView {
         imageView.animationImages = images
         imageView.startAnimating()
 
-        if redPackSize == nil {
-            imageView.sizeToFit()
+        if let sizeTmp = size {
+            imageView.frame.size = sizeTmp
         } else {
-            imageView.frame.size = size
+            imageView.sizeToFit()
         }
         let hidenDistance = max(imageView.frame.size.height, imageView.frame.size.width) * 2
         imageView.frame.origin = CGPoint(x: -hidenDistance, y: -hidenDistance)
