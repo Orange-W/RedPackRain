@@ -182,7 +182,7 @@ public class RedPackRainView: UIView {
         } else {
             imageView.frame.size = size
         }
-        let hidenDistance = max(imageView.frame.size.height, imageView.frame.size.width)
+        let hidenDistance = max(imageView.frame.size.height, imageView.frame.size.width)*2
         imageView.frame.origin = CGPoint(x: -hidenDistance, y: -hidenDistance)
         self.insertSubview(imageView, at: 0)
         redPackAllCount += 1
