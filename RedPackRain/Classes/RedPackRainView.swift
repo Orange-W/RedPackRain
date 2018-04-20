@@ -146,7 +146,7 @@ public class RedPackRainView: UIView {
     ///   - images: 炸弹图片集
     ///   - density: 密度,每x个红包就出现个炸弹
     ///   - clickHandle: 点击回调
-    func setBomb(images: [UIImage], density: Int, clickHandle: @escaping BombClickHandle) {
+    public func setBomb(images: [UIImage], density: Int, clickHandle: @escaping BombClickHandle) {
         bombClickHandle = clickHandle
         bombDensity = density
         bombImages = images
