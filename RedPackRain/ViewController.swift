@@ -18,7 +18,7 @@ class ViewController: UIViewController {
         redPackRain.setRedPack(images:
             [UIImage.init(named: "redpack1.jpeg")!,
              UIImage.init(named: "redpack2.jpeg")!,
-             UIImage.init(named: "redpack3.jpeg")!], size: CGSize(width: 100, height: 50)) { (redPackView, clickview) in
+             UIImage.init(named: "redpack3.jpeg")!]) { (redPackView, clickview) in
                 
                 print("累计\(redPackView.redPackClickedCount)个红包")
                 clickview.removeFromSuperview()
