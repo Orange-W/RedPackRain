@@ -179,9 +179,9 @@ public class RedPackRainView: UIView {
 
             if let repackAniFrame = repack.layer.presentation()?.frame, repackAniFrame.isEmpty
                 || repackAniFrame.isNull
-                || CGRect(x: frame.origin.x, y: frame.origin.y - repackAniFrame.height, width: frame.width, height: frame.height + repackAniFrame.height).intersects(repackAniFrame)  {
+                || !CGRect(x: frame.origin.x, y: frame.origin.y - repackAniFrame.height, width: frame.width, height: frame.height + repackAniFrame.height).intersects(repackAniFrame)  {
 
-//                repack.removeFromSuperview()
+                repack.removeFromSuperview()
             }
 
             if let index = redPackList.index(of: repack),
