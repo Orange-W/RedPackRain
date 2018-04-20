@@ -22,6 +22,8 @@ class ViewController: UIViewController {
                 
                 print("累计\(redPackView.redPackClickedCount)个红包")
                 clickview.removeFromSuperview()
+                redPackView.redPackDropDownTime = redPackView.redPackDropDownTime * 0.95
+                redPackView.redPackIntervalTime = redPackView.redPackIntervalTime *  0.9
 //                if let frame = clickview.layer.presentation()?.frame {
 //                    clickview.frame = frame
 //                }

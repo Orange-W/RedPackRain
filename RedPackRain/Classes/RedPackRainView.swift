@@ -22,8 +22,26 @@ public class RedPackRainView: UIView {
     public private(set) var redPackAllCount = 0
     /// 点中的红包数
     public private(set) var redPackClickedCount = 0
+    /// 最小红包间隔周期,0.01 秒
+    public let minRedPackIntervalTime = 0.01
     /// 发红包间隔时间
-    public var redPackIntervalTime = 0.0
+    public var redPackIntervalTime = 0.0 {
+        didSet {
+            if redPackIntervalTime < 0.01 {
+                redPackIntervalTime = 0.01
+            }
+        }
+    }
+
+    private var runShowFuncCount: Double {
+        get {
+            return redPackIntervalTime / minRedPackIntervalTime
+        }
+    }
+
+    ///  总执行时间
+    public var runTimeTotal: Double = 0
+
     /// 红包下落速度,到底部时间
     public var redPackDropDownTime = 0.0
     /// 红包雨持续时间
@@ -35,7 +53,7 @@ public class RedPackRainView: UIView {
     public let redPackCompomentTag = -999
 
 
-    
+    private var runShowCount = 0 // 执行计数器
     private var redPackSize: CGSize?
     private var redPackImages: [UIImage]?
     private var redPackAnimationDuration: Double?
@@ -43,6 +61,7 @@ public class RedPackRainView: UIView {
     private var completeHandle: CompleteHandle?
     private var redPackAppearHandle: RedPackAppearHandle?
     private var timeCounter = 0
+
 
     // MARK: 初始化设置
     public override init(frame: CGRect) {
@@ -122,7 +141,7 @@ public class RedPackRainView: UIView {
     public func beginToRain() {
         //防止timer重复添加
         self.timer.invalidate()
-        self.timer =  Timer.scheduledTimer(timeInterval: redPackIntervalTime, target: self, selector: #selector(showRain), userInfo: "", repeats: true)
+        self.timer =  Timer.scheduledTimer(timeInterval: minRedPackIntervalTime, target: self, selector: #selector(showRain), userInfo: "", repeats: true)
     }
     
     public func endRain() {
@@ -137,8 +156,15 @@ public class RedPackRainView: UIView {
     
     // MARK: 私有方法
     @objc private func showRain() {
+        runShowCount += 1
+        guard Double(runShowCount) >= runShowFuncCount else {
+
+            return
+        }
+        runTimeTotal += redPackIntervalTime // 执行时间
+        runShowCount = 0 // 重置计数
         removeRedPack()
-        let rest = totalTime - Double(timeCounter) * redPackIntervalTime
+        let rest = totalTime - runTimeTotal
         guard  rest > 0 else {
             endRain()
             return
@@ -150,11 +176,12 @@ public class RedPackRainView: UIView {
 
     private func removeRedPack() {
         for repack in redPackList {
+
             if let repackAniFrame = repack.layer.presentation()?.frame, repackAniFrame.isEmpty
                 || repackAniFrame.isNull
-                || !self.frame.intersects(repackAniFrame)  {
-                print("\(redPackList.count)")
-                repack.removeFromSuperview()
+                || CGRect(x: frame.origin.x, y: frame.origin.y - repackAniFrame.height, width: frame.width, height: frame.height + repackAniFrame.height).intersects(repackAniFrame)  {
+
+//                repack.removeFromSuperview()
             }
 
             if let index = redPackList.index(of: repack),
@@ -182,7 +209,7 @@ public class RedPackRainView: UIView {
         } else {
             imageView.frame.size = size
         }
-        let hidenDistance = max(imageView.frame.size.height, imageView.frame.size.width)*2
+        let hidenDistance = max(imageView.frame.size.height, imageView.frame.size.width) * 2
         imageView.frame.origin = CGPoint(x: -hidenDistance, y: -hidenDistance)
         self.insertSubview(imageView, at: 0)
         redPackAllCount += 1
