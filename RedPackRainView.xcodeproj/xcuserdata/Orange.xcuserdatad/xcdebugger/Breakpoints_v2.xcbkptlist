@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RedPackRain/Classes/RedPackRainView.swift"
-            timestampString = "545885832.681784"
+            timestampString = "545887537.134744"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "205"
-            endingLineNumber = "205"
+            startingLineNumber = "216"
+            endingLineNumber = "216"
             landmarkName = "clicked(tapgesture:)"
             landmarkType = "7">
          </BreakpointContent>

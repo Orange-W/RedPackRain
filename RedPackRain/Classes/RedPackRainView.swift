@@ -14,8 +14,10 @@ public class RedPackRainView: UIView {
     public typealias RedPackAppearHandle = (UIImageView, Int) -> Void
 
 
+    /// 红包view列表
+    public var redPackList: [UIImageView] = []
     /// 定时器
-    public var timer:Timer = Timer.init()
+    public var timer: Timer = Timer.init()
     /// 红包总数
     public private(set) var redPackAllCount = 0
     /// 点中的红包数
@@ -41,6 +43,7 @@ public class RedPackRainView: UIView {
     private var completeHandle: CompleteHandle?
     private var redPackAppearHandle: RedPackAppearHandle?
     private var timeCounter = 0
+
     // MARK: 初始化设置
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -134,6 +137,7 @@ public class RedPackRainView: UIView {
     
     // MARK: 私有方法
     @objc private func showRain() {
+        removeRedPack()
         let rest = totalTime - Double(timeCounter) * redPackIntervalTime
         guard  rest > 0 else {
             endRain()
@@ -143,7 +147,23 @@ public class RedPackRainView: UIView {
         timeCounter += 1
         show()
     }
-    
+
+    private func removeRedPack() {
+        for repack in redPackList {
+            if let repackAniFrame = repack.layer.presentation()?.frame, repackAniFrame.isEmpty
+                || repackAniFrame.isNull
+                || !self.frame.intersects(repackAniFrame)  {
+                print("\(redPackList.count)")
+                repack.removeFromSuperview()
+            }
+
+            if let index = redPackList.index(of: repack),
+                repack.superview == nil {
+                redPackList.remove(at: index)
+            }
+        }
+    }
+
     private func show() {
         let size = redPackSize ?? CGSize.init(width: 50, height: 50)
         //创建画布
@@ -166,6 +186,7 @@ public class RedPackRainView: UIView {
         redPackAllCount += 1
         //画布动画
         addAnimation(imageView: imageView)
+        redPackList.append(imageView)
         redPackDidAppear(redPack: imageView)
     }
 
@@ -185,16 +206,6 @@ public class RedPackRainView: UIView {
         moveAnimation.repeatCount = 1
         // 动画的速度
         moveAnimation.timingFunction = CAMediaTimingFunction.init(name: kCAMediaTimingFunctionLinear)
-        // 动画结束在视野外, 则销毁
-        CATransaction.setCompletionBlock {
-            if let frame = imageView.layer.presentation()?.frame {
-                let x = frame.origin.x
-                let y = frame.origin.y
-                if y > frame.height || x<0 || y < 0 {
-                    imageView.removeFromSuperview()
-                }
-            }
-        }
         moveLayer.add(moveAnimation, forKey: "move")
     }
 
@@ -203,10 +214,6 @@ public class RedPackRainView: UIView {
         let views = self.subviews
         // 倒序, 从最上层view找起
         for viewTuple in views.enumerated().reversed() {
-            // 销毁界面外的红包
-            if let yIndex = viewTuple.element.layer.presentation()?.frame.origin.y, yIndex > self.frame.height || yIndex < -(viewTuple.element.frame.size.height + viewTuple.element.frame.size.width)/4 {
-                viewTuple.element.removeFromSuperview()
-            }
             // 判断界面内的红包的点击事件
             if viewTuple.element.layer.presentation()?
                 .hitTest(touchPoint) != nil {
