@@ -173,19 +173,19 @@ public class RedPackRainView: UIView {
         redPackAppearHandle?(redPack, redPackAllCount)
     }
 
-    //给画布添加动画
     func addAnimation(imageView: UIImageView) {
         let moveLayer = imageView.layer
-        //此处keyPath为CALayer的属性
+        // 此处keyPath为CALayer的属性
         let  moveAnimation:CAKeyframeAnimation = CAKeyframeAnimation(keyPath:"position")
-        //动画路线，一个数组里有多个轨迹点
+        // 动画路线，一个数组里有多个轨迹点
         moveAnimation.values = [NSValue(cgPoint: CGPoint(x: CGFloat(Float(arc4random_uniform(UInt32(frame.width)))), y: -imageView.frame.height)),NSValue(cgPoint: CGPoint(x:CGFloat(Float(arc4random_uniform(UInt32(frame.width)))), y: frame.height+10))]
-        //动画间隔
+        // 动画间隔
         moveAnimation.duration = redPackDropDownTime
         //重复次数
         moveAnimation.repeatCount = 1
-        //动画的速度
+        // 动画的速度
         moveAnimation.timingFunction = CAMediaTimingFunction.init(name: kCAMediaTimingFunctionLinear)
+        // 动画结束在视野外, 则销毁
         CATransaction.setCompletionBlock {
             if let yIndex = imageView.layer.presentation()?.frame.origin.y, yIndex > self.frame.height {
                 imageView.removeFromSuperview()
