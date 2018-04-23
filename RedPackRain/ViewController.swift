@@ -33,7 +33,7 @@ class ViewController: UIViewController {
             self.rollAnimation(view: redpackView)
         }
 
-        redPackRain.setBomb(images: [UIImage.init(named: "bomb.jpg")!], density: 8) { (redPackRainView, bomb) in
+        redPackRain.setBomb(images: [UIImage.init(named: "bomb.jpg")!], size: CGSize.init(width: 250, height: 191), density: 8) { (redPackRainView, bomb) in
             print("点了个炸弹")
         }
 

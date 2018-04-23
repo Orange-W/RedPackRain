@@ -180,8 +180,8 @@ public class RedPackRainView: UIView {
     }
 
 
-    /// 添加点击不会穿透的view
-    /// 配合clickPenetrateEnable 属性使用，属性为false则不会执行任何操作。
+    /// 添加不可点击, 不可穿透的 view, 点击后会阻挡点击效果。
+    /// 使用前先打开 clickPenetrateEnable 开关，否则不会执行任何操作。
     /// 注意：会改变 view 的 tag 值
     /// - Parameter views: 不想点击被穿透的 view 数组
     public func addNotPenetrateViews(views:[UIView]) {
@@ -190,7 +190,20 @@ public class RedPackRainView: UIView {
                 view.tag = notPenetrateTag
             }
         }
+    }
 
+    /// 删除 View 的不可点击特性
+    /// 使用前先打开 clickPenetrateEnable 开关，否则不会执行任何操作。
+    /// 注意：会改变 view 的 tag 值
+    /// - Parameter views: 去除不可点击穿透的 view 数组
+    public func removeNotPenetrateViews(views:[UIView]) {
+        if clickPenetrateEnable {
+            for view in views {
+                if view.tag == notPenetrateTag {
+                    view.tag = 0
+                }
+            }
+        }
     }
     
     // MARK: 私有方法
