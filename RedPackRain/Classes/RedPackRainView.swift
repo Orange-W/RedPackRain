@@ -43,12 +43,14 @@ public class RedPackRainView: UIView {
         }
     }
 
-    ///  总执行时间
+    /// 已执行时间
     public var runTimeTotal: Double = 0
+    /// 剩余时间
+    public var restTime: Double { return totalTime - runTimeTotal }
 
     /// 红包下落速度,到底部时间
     public var redPackDropDownTime = 0.0
-    /// 红包雨持续时间
+    /// 红包雨持续总时间
     public var totalTime = 0.0
 
     /// 是否开启点击穿透, 点击效果可以穿透上层的遮挡物
@@ -216,7 +218,7 @@ public class RedPackRainView: UIView {
         runTimeTotal += redPackIntervalTime // 执行时间
         runShowCount = 0 // 重置计数
         clearScreen()
-        let rest = totalTime - runTimeTotal
+        let rest = self.restTime
         guard  rest > 0 else {
             endRain()
             return
