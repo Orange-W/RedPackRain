@@ -109,6 +109,20 @@ public class RedPackRainView: UIView {
         completeHandle?(self)
     }
 
+
+    /// 暂停红包雨
+    public func stopRain() {
+            self.timer.invalidate()
+            //停止所有layer的动画
+    }
+
+
+    /// 重启红包雨
+    public func restartRain() {
+        self.timer =  Timer.scheduledTimer(timeInterval: minRedPackIntervalTime, target: self, selector: #selector(showRain), userInfo: "", repeats: true)
+    }
+
+
     // MARK: 初始化设置
     
     /// 红包设置
@@ -131,7 +145,7 @@ public class RedPackRainView: UIView {
         animationDuration: Double? = 1,
         intervalTime: Double = 0.5,
         dropDownTime: Double = 5,
-        totalTime: Double = 30,
+        totalTime: Double = 15,
         clickedHandle: ClickHandle? = nil
         ) {
         self.redPackSize = size

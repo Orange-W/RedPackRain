@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     let redPackRain = RedPackRainView()
-    
+    let closeButton = UIButton()
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(redPackRain)
@@ -40,6 +40,26 @@ class ViewController: UIViewController {
         redPackRain.setBombAppearHandle { (bomb, count) in
             self.rollAnimation(view: bomb)
         }
+
+        do { // 右上角关闭按钮
+            closeButton.addTarget(self, action: #selector(closeClick), for: .touchUpInside)
+            closeButton.frame = CGRect(x: UIScreen.main.bounds.width - 30, y: 0, width: 30, height: 30)
+            closeButton.backgroundColor = .blue
+            redPackRain.addSubview(closeButton)
+        }
+    }
+
+    @objc func closeClick() {
+        if closeButton.tag == 0 {
+            closeButton.tag = 1
+            redPackRain.stopRain()
+            closeButton.backgroundColor = .red
+        } else {
+            closeButton.tag = 0
+            redPackRain.restartRain()
+            closeButton.backgroundColor = .green
+        }
+
     }
 
     override func viewDidAppear(_ animated: Bool) {
