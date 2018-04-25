@@ -20,6 +20,7 @@ public class RedPackRainView: UIView {
     // MARK: - 红包
     /// 红包view列表
     public var redPackList: [UIImageView] = []
+    public var redPackImages: [UIImage] = []
     /// 定时器
     public var timer: Timer = Timer.init()
     /// 红包总数
@@ -62,7 +63,6 @@ public class RedPackRainView: UIView {
 
     private var runShowCount = 0 // 执行计数器
     private var redPackSize: CGSize?
-    private var redPackImages: [UIImage] = []
     private var redPackAnimationDuration: Double?
     private var timeCounter = 0
 
@@ -73,10 +73,10 @@ public class RedPackRainView: UIView {
     // MARK: - 炸弹
     /// 炸弹密度,每10个红包一个炸弹
     public var bombList: [UIImageView] = []
+    public var bombImages: [UIImage] = []
     public var bombDensity = 0
     public var bombAllCount = 0 // 执行计数器
     private var bombSize: CGSize? // 图片大小
-    private var bombImages: [UIImage] = []
     private var bombAppearHandle: BombAppearHandle?
     private var bombClickHandle: BombClickHandle? = nil
 
