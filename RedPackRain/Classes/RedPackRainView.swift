@@ -112,13 +112,13 @@ public class RedPackRainView: UIView {
 
     /// 暂停红包雨
     public func stopRain() {
-            self.timer.invalidate()
-            //停止所有layer的动画
+        self.timer.invalidate()
     }
 
 
     /// 重启红包雨
     public func restartRain() {
+        self.timer.invalidate()
         self.timer =  Timer.scheduledTimer(timeInterval: minRedPackIntervalTime, target: self, selector: #selector(showRain), userInfo: "", repeats: true)
     }
 
