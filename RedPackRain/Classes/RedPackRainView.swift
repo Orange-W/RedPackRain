@@ -79,13 +79,13 @@ public class RedPackRainView: UIView {
     private var bombSize: CGSize? // 图片大小
     private var bombAppearHandle: BombAppearHandle?
     private var bombClickHandle: BombClickHandle? = nil
-
+    
     // MARK: 初始化设置
     public override init(frame: CGRect) {
         super.init(frame: frame)
-                let tap = UITapGestureRecognizer()
-                tap.addTarget(self, action: #selector(self.clicked))
-                self.addGestureRecognizer(tap)
+        let tap = UITapGestureRecognizer()
+        tap.addTarget(self, action: #selector(self.clicked))
+        self.addGestureRecognizer(tap)
     }
     
     required public init?(coder aDecoder: NSCoder) {
