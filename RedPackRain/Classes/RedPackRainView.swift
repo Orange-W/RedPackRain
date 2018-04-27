@@ -103,8 +103,10 @@ public class RedPackRainView: UIView {
         self.timer.invalidate()
         //停止所有layer的动画
         for subview in subviews {
-            subview.layer.removeAllAnimations()
-            subview.removeFromSuperview()
+            if subview.tag == redPackCompomentTag || subview.tag == bombCompomentTag {
+                subview.layer.removeAllAnimations()
+                subview.removeFromSuperview()
+            }
         }
         completeHandle?(self)
     }
