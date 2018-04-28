@@ -56,14 +56,14 @@ class ViewController: UIViewController {
             closeButton.backgroundColor = .red
         } else {
             closeButton.tag = 0
-            redPackRain.restartRain()
+            redPackRain.continueRain()
             closeButton.backgroundColor = .green
         }
 
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        redPackRain.beginToRain()
+        redPackRain.startGame()
     }
 
     func rollAnimation(view: UIView) {

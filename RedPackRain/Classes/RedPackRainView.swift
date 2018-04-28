@@ -45,7 +45,7 @@ public class RedPackRainView: UIView {
     }
 
     /// 已执行时间
-    public var runTimeTotal: Double = 0
+    public private(set) var runTimeTotal: Double = 0
     /// 剩余时间
     public var restTime: Double { return totalTime - runTimeTotal }
 
@@ -61,10 +61,11 @@ public class RedPackRainView: UIView {
     public let bombCompomentTag = -1000
 
 
-    private var runShowCount = 0 // 执行计数器
+
     private var redPackSize: CGSize?
     private var redPackAnimationDuration: Double?
-    private var timeCounter = 0
+    private var runShowCount = 0 // 每 x 步执行计数器,用户设置
+    private private(set) var timeCounter = 0  // 最小步长计数器, 0.01 秒计数一次
 
     private var clickHandle: ClickHandle?
     private var completeHandle: CompleteHandle?
@@ -74,8 +75,13 @@ public class RedPackRainView: UIView {
     /// 炸弹密度,每10个红包一个炸弹
     public var bombList: [UIImageView] = []
     public var bombImages: [UIImage] = []
+    /// 炸弹频率,每x个红包出现一个炸弹,默认 0 则没有炸弹
     public var bombDensity = 0
-    public var bombAllCount = 0 // 执行计数器
+    /// 炸弹总数计数器
+    public private(set) var bombAllCount = 0
+    /// 点中的炸弹数
+    public private(set) var bombClickedCount = 0
+
     private var bombSize: CGSize? // 图片大小
     private var bombAppearHandle: BombAppearHandle?
     private var bombClickHandle: BombClickHandle? = nil
@@ -93,24 +99,25 @@ public class RedPackRainView: UIView {
     }
 
     // MARK: 启动函数
-    public func beginToRain() {
+    public func startGame() {
         //防止timer重复添加
         self.timer.invalidate()
         self.timer =  Timer.scheduledTimer(timeInterval: minRedPackIntervalTime, target: self, selector: #selector(showRain), userInfo: "", repeats: true)
     }
 
-    public func endRain() {
+    public func endGame() {
         self.timer.invalidate()
-        //停止所有layer的动画
-        for subview in subviews {
-            if subview.tag == redPackCompomentTag || subview.tag == bombCompomentTag {
-                subview.layer.removeAllAnimations()
-                subview.removeFromSuperview()
-            }
-        }
+        // 清除界面红包和炸弹
+        clearAllBomb()
+        clearAllRedPack()
         completeHandle?(self)
     }
 
+    public func restartGame(configBlock: ((RedPackRainView) -> Void)?) {
+        resetValue()
+        configBlock?(self)
+        startGame()
+    }
 
     /// 暂停红包雨
     public func stopRain() {
@@ -118,15 +125,52 @@ public class RedPackRainView: UIView {
     }
 
 
-    /// 重启红包雨
-    public func restartRain() {
+    /// 继续下落红包雨
+    public func continueRain() {
         self.timer.invalidate()
         self.timer =  Timer.scheduledTimer(timeInterval: minRedPackIntervalTime, target: self, selector: #selector(showRain), userInfo: "", repeats: true)
     }
 
+    // MARK: - 重置方法
+    /// 重新开始游戏
 
-    // MARK: 初始化设置
-    
+    private func resetValue() {
+        timer.invalidate()
+        clearAllBomb()
+        clearAllRedPack()
+        clearViewsOutSideScreen()
+        // 重置值
+        redPackClickedCount = 0
+        runTimeTotal = 0
+        timeCounter = 0
+        redPackAllCount = 0
+        bombAllCount = 0
+        bombClickedCount = 0
+    }
+
+    /// 清除界面上所有红包
+    public func clearAllRedPack() {
+        for subview in subviews {
+            if subview.tag == redPackCompomentTag {
+                subview.layer.removeAllAnimations()
+                subview.removeFromSuperview()
+            }
+        }
+    }
+
+
+    /// 清除界面上所有炸弹
+    public func clearAllBomb() {
+        for subview in subviews {
+            if subview.tag == bombCompomentTag {
+                subview.layer.removeAllAnimations()
+                subview.removeFromSuperview()
+            }
+        }
+    }
+
+
+    // MARK: - 初始化设置
     /// 红包设置
     ///
     /// - Parameters:
@@ -233,10 +277,10 @@ public class RedPackRainView: UIView {
         }
         runTimeTotal += redPackIntervalTime // 执行时间
         runShowCount = 0 // 重置计数
-        clearScreen()
+        clearViewsOutSideScreen()
         let rest = self.restTime
         guard  rest > 0 else {
-            endRain()
+            endGame()
             return
         }
 
@@ -245,7 +289,7 @@ public class RedPackRainView: UIView {
     }
 
     // 清屏, 把视野外的view去掉
-    private func clearScreen() {
+    private func clearViewsOutSideScreen() {
         // 红包
         for repack in redPackList {
             removeCompoment(compoment: repack)
@@ -310,6 +354,7 @@ public class RedPackRainView: UIView {
                     return
                 } else if viewTuple.element.tag == bombCompomentTag {
                     // 如果是炸弹
+                    bombClickedCount += 1
                     bombClickHandle?(self, viewTuple.element)
                 } else {
                     // 没开启点击穿透 或 点击 view 在不穿透列表中，则阻断点击
@@ -320,6 +365,7 @@ public class RedPackRainView: UIView {
             }
         }
     }
+
 
     // MARK: 辅助函数
     private func addRedPack() -> UIImageView {
