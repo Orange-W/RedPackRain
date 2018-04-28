@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "RedPackRainView"
-  s.version      = "5.0.0"
+  s.version      = "5.1.0"
   s.summary      = "红包雨的组件"
 
   # This description is used to generate tags and improve search results.

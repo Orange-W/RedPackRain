@@ -99,9 +99,10 @@ public class RedPackRainView: UIView {
     }
 
     // MARK: 启动函数
-    public func startGame() {
+    public func startGame(configBlock: ((RedPackRainView) -> Void)?) {
         //防止timer重复添加
-        self.timer.invalidate()
+        resetValue()
+        configBlock?(self)
         self.timer =  Timer.scheduledTimer(timeInterval: minRedPackIntervalTime, target: self, selector: #selector(showRain), userInfo: "", repeats: true)
     }
 
@@ -111,12 +112,6 @@ public class RedPackRainView: UIView {
         clearAllBomb()
         clearAllRedPack()
         completeHandle?(self)
-    }
-
-    public func restartGame(configBlock: ((RedPackRainView) -> Void)?) {
-        resetValue()
-        configBlock?(self)
-        startGame()
     }
 
     /// 暂停红包雨
