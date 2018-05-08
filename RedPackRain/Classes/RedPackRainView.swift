@@ -91,7 +91,7 @@ public class RedPackRainView: UIView {
         super.init(frame: frame)
         let tap = UITapGestureRecognizer()
         tap.addTarget(self, action: #selector(self.clicked))
-        self.addGestureRecognizer(tap)
+        addGestureRecognizer(tap)
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -99,7 +99,7 @@ public class RedPackRainView: UIView {
     }
 
     // MARK: 启动函数
-    public func startGame(configBlock: ((RedPackRainView) -> Void)?) {
+    public func startGame(configBlock: ((RedPackRainView) -> Void)? = nil) {
         //防止timer重复添加
         resetValue()
         configBlock?(self)
@@ -117,6 +117,8 @@ public class RedPackRainView: UIView {
     /// 暂停红包雨
     public func stopRain() {
         self.timer.invalidate()
+        stopRedPack()
+        stopBomb()
     }
 
 
@@ -124,6 +126,8 @@ public class RedPackRainView: UIView {
     public func continueRain() {
         self.timer.invalidate()
         self.timer =  Timer.scheduledTimer(timeInterval: minRedPackIntervalTime, target: self, selector: #selector(showRain), userInfo: "", repeats: true)
+        resumeRedPack()
+        resumeBomb()
     }
 
     // MARK: - 重置方法
@@ -362,7 +366,58 @@ public class RedPackRainView: UIView {
     }
 
 
-    // MARK: 辅助函数
+    // MARK: - 辅助函数
+    // MARK:  暂停与恢复
+
+    /// 恢复红包
+    private func resumeRedPack() {
+        for redpack in redPackList {
+            resumeLayer(layer: redpack.layer)
+        }
+    }
+
+    /// 恢复炸弹
+    private func resumeBomb() {
+        for redpack in bombList {
+            resumeLayer(layer: redpack.layer)
+        }
+    }
+
+    /// 暂停红包
+    private func stopRedPack() {
+        for i in 0..<redPackList.count {
+            let imgView = redPackList[i]
+            pauseLayer(layer: imgView.layer)
+        }
+    }
+
+    /// 暂停炸弹
+    private func stopBomb() {
+        for i in 0..<bombList.count {
+            let imgView = bombList[i]
+            pauseLayer(layer: imgView.layer)
+        }
+    }
+
+    private func pauseLayer(layer: CALayer) {
+        /// 不要乱调整代码顺序
+        let off = layer.beginTime * CFTimeInterval(layer.speed)
+        layer.timeOffset = 0.0
+        layer.beginTime = 0.0
+        let pausedTime = layer.convertTime(CACurrentMediaTime(), to: nil)
+        layer.speed = 0.0
+        layer.timeOffset = pausedTime - off
+    }
+
+    private func resumeLayer(layer: CALayer) {
+        let pausedTime = layer.timeOffset
+        layer.speed = 1.0;
+        layer.timeOffset = 0.0;
+        layer.beginTime = 0.0;
+        let timeSincePause = layer.convertTime(CACurrentMediaTime(), to: nil) - pausedTime;
+        layer.beginTime = timeSincePause;
+    }
+
     private func addRedPack() -> UIImageView {
         let redPack = buildImageView(images: redPackImages, size: redPackSize)
         redPack.tag = redPackCompomentTag
@@ -393,7 +448,7 @@ public class RedPackRainView: UIView {
         }
         let hidenDistance = max(imageView.frame.size.height, imageView.frame.size.width) * 2
         imageView.frame.origin = CGPoint(x: -hidenDistance, y: -hidenDistance)
-        self.insertSubview(imageView, at: 0)
+        insertSubview(imageView, at: 0)
         return imageView
     }
 
