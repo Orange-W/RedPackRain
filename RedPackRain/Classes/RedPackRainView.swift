@@ -9,12 +9,16 @@
 import UIKit
 
 public class RedPackRainView: UIView {
+    /// 红包点击回调
     public typealias ClickHandle = (RedPackRainView, UIView) -> Void
+    /// 炸弹点击回调
     public typealias BombClickHandle = (RedPackRainView, UIView) -> Void
 
+    /// 红包出现回调
     public typealias RedPackAppearHandle = (UIImageView, Int) -> Void
+    /// 炸弹出现回调
     public typealias BombAppearHandle = (UIImageView, Int) -> Void
-
+    /// 红包雨结束回调(包括正常与非正常结束)
     public typealias CompleteHandle = (RedPackRainView) -> Void
 
     // MARK: - 红包
@@ -56,6 +60,7 @@ public class RedPackRainView: UIView {
 
     /// 是否开启点击穿透, 点击效果可以穿透上层的遮挡物
     public var clickPenetrateEnable = false
+    /// 三种标记, -1001: 不可穿透的遮罩, -999: 红包, -1000: 炸弹
     public let notPenetrateTag = -1001
     public let redPackCompomentTag = -999
     public let bombCompomentTag = -1000
@@ -106,6 +111,7 @@ public class RedPackRainView: UIView {
         self.timer =  Timer.scheduledTimer(timeInterval: minRedPackIntervalTime, target: self, selector: #selector(showRain), userInfo: "", repeats: true)
     }
 
+    /// 结束游戏
     public func endGame() {
         self.timer.invalidate()
         // 清除界面红包和炸弹
@@ -132,7 +138,6 @@ public class RedPackRainView: UIView {
 
     // MARK: - 重置方法
     /// 重新开始游戏
-
     private func resetValue() {
         timer.invalidate()
         clearAllBomb()
@@ -399,8 +404,10 @@ public class RedPackRainView: UIView {
         }
     }
 
+    // 暂停动画
     private func pauseLayer(layer: CALayer) {
-        /// 不要乱调整代码顺序
+        // notice: 不要乱调整代码顺序!
+        // 时间回溯
         let off = layer.beginTime * CFTimeInterval(layer.speed)
         layer.timeOffset = 0.0
         layer.beginTime = 0.0
@@ -409,6 +416,7 @@ public class RedPackRainView: UIView {
         layer.timeOffset = pausedTime - off
     }
 
+    // 恢复动画
     private func resumeLayer(layer: CALayer) {
         let pausedTime = layer.timeOffset
         layer.speed = 1.0;
@@ -424,7 +432,7 @@ public class RedPackRainView: UIView {
         return redPack
     }
 
-    func addBomb() -> UIImageView {
+    private func addBomb() -> UIImageView {
         let bomb = buildImageView(images: bombImages, size: bombSize)
         bomb.tag = bombCompomentTag
         return bomb
@@ -452,7 +460,7 @@ public class RedPackRainView: UIView {
         return imageView
     }
 
-    func addAnimation(imageView: UIImageView) {
+    private func addAnimation(imageView: UIImageView) {
         let moveLayer = imageView.layer
         // 此处keyPath为CALayer的属性
         let  moveAnimation:CAKeyframeAnimation = CAKeyframeAnimation(keyPath:"position")
