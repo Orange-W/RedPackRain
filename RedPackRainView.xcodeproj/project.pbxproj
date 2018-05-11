@@ -13,7 +13,7 @@
 		C209AB35207D9AE7007681AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C209AB34207D9AE7007681AC /* Assets.xcassets */; };
 		C209AB38207D9AE7007681AC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C209AB36207D9AE7007681AC /* LaunchScreen.storyboard */; };
 		C209AB43207D9AE8007681AC /* RedPackRainUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C209AB42207D9AE8007681AC /* RedPackRainUITests.swift */; };
-		C209AB4E207D9B02007681AC /* RedPackRainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C209AB4D207D9B02007681AC /* RedPackRainView.swift */; };
+		C209AB4E207D9B02007681AC /* RedpackRainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C209AB4D207D9B02007681AC /* RedpackRainView.swift */; };
 		C215AF9B207DA96600F07EDF /* redpack2.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = C215AF9A207DA96600F07EDF /* redpack2.jpeg */; };
 		C215AF9D207DA96A00F07EDF /* redpack1.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = C215AF9C207DA96A00F07EDF /* redpack1.jpeg */; };
 		C215AF9F207DA96E00F07EDF /* redpack3.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = C215AF9E207DA96E00F07EDF /* redpack3.jpeg */; };
@@ -41,7 +41,7 @@
 		C209AB3E207D9AE8007681AC /* RedPackRainUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RedPackRainUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C209AB42207D9AE8007681AC /* RedPackRainUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedPackRainUITests.swift; sourceTree = "<group>"; };
 		C209AB44207D9AE8007681AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C209AB4D207D9B02007681AC /* RedPackRainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedPackRainView.swift; sourceTree = "<group>"; };
+		C209AB4D207D9B02007681AC /* RedpackRainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedpackRainView.swift; sourceTree = "<group>"; };
 		C215AF9A207DA96600F07EDF /* redpack2.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = redpack2.jpeg; sourceTree = "<group>"; };
 		C215AF9C207DA96A00F07EDF /* redpack1.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = redpack1.jpeg; sourceTree = "<group>"; };
 		C215AF9E207DA96E00F07EDF /* redpack3.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = redpack3.jpeg; sourceTree = "<group>"; };
@@ -114,7 +114,7 @@
 		C215AFA0207DE0AA00F07EDF /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				C209AB4D207D9B02007681AC /* RedPackRainView.swift */,
+				C209AB4D207D9B02007681AC /* RedpackRainView.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -228,7 +228,7 @@
 			files = (
 				C209AB30207D9AE7007681AC /* ViewController.swift in Sources */,
 				C209AB2E207D9AE7007681AC /* AppDelegate.swift in Sources */,
-				C209AB4E207D9B02007681AC /* RedPackRainView.swift in Sources */,
+				C209AB4E207D9B02007681AC /* RedpackRainView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

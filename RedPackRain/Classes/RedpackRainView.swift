@@ -10,31 +10,31 @@ import UIKit
 
 @objc protocol RedpackRainDelegate {
     /// 红包出现
-    @objc optional func redpackDidAppear(rainView: RedPackRainView, redpack: UIView, index: Int) -> Void
+    @objc optional func redpackDidAppear(rainView: RedpackRainView, redpack: UIView, index: Int) -> Void
     /// 红包被点中
-    @objc optional func redpackDidClicked(rainView: RedPackRainView, redpack: UIView) -> Void
+    @objc optional func redpackDidClicked(rainView: RedpackRainView, redpack: UIView) -> Void
 
     /// 炸弹出现
-    @objc optional func bombDidAppear(rainView: RedPackRainView, bomb: UIView, index: Int) -> Void
+    @objc optional func bombDidAppear(rainView: RedpackRainView, bomb: UIView, index: Int) -> Void
     ///  炸弹被点中
-    @objc optional func bombDidClicked(rainView: RedPackRainView, bomb: UIView) -> Void
+    @objc optional func bombDidClicked(rainView: RedpackRainView, bomb: UIView) -> Void
 }
 
 
-public class RedPackRainView: UIView {
+public class RedpackRainView: UIView {
     weak var delegate: RedpackRainDelegate?
 
     /// 红包点击回调
-    public typealias ClickHandle = (RedPackRainView, UIView) -> Void
+    public typealias ClickHandle = (RedpackRainView, UIView) -> Void
     /// 炸弹点击回调
-    public typealias BombClickHandle = (RedPackRainView, UIView) -> Void
+    public typealias BombClickHandle = (RedpackRainView, UIView) -> Void
 
     /// 红包出现回调
     public typealias RedPackAppearHandle = (UIImageView, Int) -> Void
     /// 炸弹出现回调
     public typealias BombAppearHandle = (UIImageView, Int) -> Void
     /// 红包雨结束回调(包括正常与非正常结束)
-    public typealias CompleteHandle = (RedPackRainView) -> Void
+    public typealias CompleteHandle = (RedpackRainView) -> Void
 
     // MARK: - 红包
     /// 红包view列表
@@ -119,7 +119,7 @@ public class RedPackRainView: UIView {
     }
 
     // MARK: 启动函数
-    public func startGame(configBlock: ((RedPackRainView) -> Void)? = nil) {
+    public func startGame(configBlock: ((RedpackRainView) -> Void)? = nil) {
         //防止timer重复添加
         resetValue()
         configBlock?(self)

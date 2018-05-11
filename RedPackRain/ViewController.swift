@@ -9,7 +9,7 @@
 import UIKit
 
 class ViewController: UIViewController {
-    let redPackRain = RedPackRainView()
+    let redPackRain = RedpackRainView()
     let closeButton = UIButton()
     override func viewDidLoad() {
         super.viewDidLoad()
