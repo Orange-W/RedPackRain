@@ -8,7 +8,23 @@
 
 import UIKit
 
+@objc protocol RedpackRainDelegate {
+    /// 红包出现
+    @objc optional func redpackDidAppear(rainView:RedPackRainView, redpack: UIView) -> Void
+    /// 红包被点中
+    @objc optional func redpackDidClicked(rainView:RedPackRainView, redpack: UIView) -> Void
+
+
+    /// 炸弹出现
+    @objc optional func bombDidAppear(rainView:RedPackRainView, redpack: UIView) -> Void
+    ///  炸弹被点中
+    @objc optional func bombDidClicked(rainView:RedPackRainView, redpack: UIView) -> Void
+}
+
+
 public class RedPackRainView: UIView {
+    weak var delegate: RedpackRainDelegate?
+
     /// 红包点击回调
     public typealias ClickHandle = (RedPackRainView, UIView) -> Void
     /// 炸弹点击回调
