@@ -10,15 +10,14 @@ import UIKit
 
 @objc protocol RedpackRainDelegate {
     /// 红包出现
-    @objc optional func redpackDidAppear(rainView:RedPackRainView, redpack: UIView) -> Void
+    @objc optional func redpackDidAppear(rainView: RedPackRainView, redpack: UIView, index: Int) -> Void
     /// 红包被点中
-    @objc optional func redpackDidClicked(rainView:RedPackRainView, redpack: UIView) -> Void
-
+    @objc optional func redpackDidClicked(rainView: RedPackRainView, redpack: UIView) -> Void
 
     /// 炸弹出现
-    @objc optional func bombDidAppear(rainView:RedPackRainView, redpack: UIView) -> Void
+    @objc optional func bombDidAppear(rainView: RedPackRainView, bomb: UIView, index: Int) -> Void
     ///  炸弹被点中
-    @objc optional func bombDidClicked(rainView:RedPackRainView, redpack: UIView) -> Void
+    @objc optional func bombDidClicked(rainView: RedPackRainView, bomb: UIView) -> Void
 }
 
 
@@ -351,11 +350,13 @@ public class RedPackRainView: UIView {
     /// 红包出现回调
     private func redPackDidAppear(redPack: UIImageView) {
         redPackAppearHandle?(redPack, redPackAllCount)
+        delegate?.redpackDidAppear?(rainView: self, redpack: redPack, index: redPackAllCount)
     }
 
     /// 炸弹出现回调
     private func bombDidAppear(bomb: UIImageView) {
         bombAppearHandle?(bomb, bombAllCount)
+        delegate?.bombDidAppear?(rainView: self, bomb: bomb, index: redPackAllCount)
     }
 
     /// 点击事件
@@ -371,11 +372,13 @@ public class RedPackRainView: UIView {
                     // 点到的是红包,马上结束
                     redPackClickedCount += 1
                     clickHandle?(self, viewTuple.element)
+                    delegate?.redpackDidClicked?(rainView: self, redpack: viewTuple.element)
                     return
                 } else if viewTuple.element.tag == bombCompomentTag {
                     // 如果是炸弹
                     bombClickedCount += 1
                     bombClickHandle?(self, viewTuple.element)
+                    delegate?.bombDidClicked?(rainView: self, bomb: viewTuple.element)
                 } else {
                     // 没开启点击穿透 或 点击 view 在不穿透列表中，则阻断点击
                     if !clickPenetrateEnable || viewTuple.element.tag == notPenetrateTag {
