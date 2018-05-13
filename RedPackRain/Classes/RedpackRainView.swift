@@ -165,18 +165,7 @@ public class RedpackRainView: UIView {
         isInTimeBack = true
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
             if self.isInTimeBack {
-                self.backTimetimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { (_) in
-                    for i in 0..<self.redPackList.count {
-                        let imgView = self.redPackList[i]
-                        self.timeBackLayer(layer: imgView.layer)
-                    }
-
-                    for i in 0..<self.bombList.count {
-                        let imgView = self.bombList[i]
-                        self.timeBackLayer(layer: imgView.layer)
-                    }
-                    self.backTimeCount += 0.001
-                }
+                self.backTimetimer = Timer.scheduledTimer(timeInterval: self.minRedPackIntervalTime, target: self, selector: #selector(self.backTime), userInfo: "", repeats: true)
             }
         }
     }
@@ -483,6 +472,22 @@ public class RedpackRainView: UIView {
         let timeSincePause = layer.convertTime(CACurrentMediaTime(), to: nil) - pausedTime
         layer.beginTime = timeSincePause;
     }
+
+    @objc private func backTime() {
+        // 红包倒流
+        for i in 0..<self.redPackList.count {
+            let imgView = self.redPackList[i]
+            self.timeBackLayer(layer: imgView.layer)
+        }
+
+        // 炸弹倒流
+        for i in 0..<self.bombList.count {
+            let imgView = self.bombList[i]
+            self.timeBackLayer(layer: imgView.layer)
+        }
+        self.backTimeCount += 0.001
+    }
+
 
     // 回溯动画的时间偏移量
     private func timeBackLayer(layer: CALayer) {
