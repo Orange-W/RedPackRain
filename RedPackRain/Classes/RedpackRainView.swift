@@ -140,16 +140,47 @@ public class RedpackRainView: UIView {
         self.timer.invalidate()
         stopRedPack()
         stopBomb()
+        stopTimeBack()
     }
-
 
     /// 继续下落红包雨
     public func continueRain() {
         self.timer.invalidate()
+        stopTimeBack()
         self.timer =  Timer.scheduledTimer(timeInterval: minRedPackIntervalTime, target: self, selector: #selector(showRain), userInfo: "", repeats: true)
         resumeRedPack()
         resumeBomb()
     }
+
+    /// 时间倒流,回溯红包雨
+    private var isInTimeBack = false
+    private var backTimeCount = 0.0
+    private var backTimetimer: Timer?
+    public func timeBackRain() {
+        // 暂停红包雨
+        stopRain()
+        // 重置回溯参数
+        stopTimeBack()
+        // 标记当前状态 (为了下面判断 0.3 秒的延时)
+        isInTimeBack = true
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
+            if self.isInTimeBack {
+                self.backTimetimer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { (_) in
+                    for i in 0..<self.redPackList.count {
+                        let imgView = self.redPackList[i]
+                        self.timeBackLayer(layer: imgView.layer)
+                    }
+
+                    for i in 0..<self.bombList.count {
+                        let imgView = self.bombList[i]
+                        self.timeBackLayer(layer: imgView.layer)
+                    }
+                    self.backTimeCount += 0.001
+                }
+            }
+        }
+    }
+
 
     // MARK: - 重置方法
     /// 重新开始游戏
@@ -291,7 +322,6 @@ public class RedpackRainView: UIView {
     @objc private func showRain() {
         runShowCount += 1
         guard Double(runShowCount) >= runShowFuncCount else {
-
             return
         }
         runTimeTotal += redPackIntervalTime // 执行时间
@@ -366,8 +396,9 @@ public class RedpackRainView: UIView {
         // 倒序, 从最上层view找起
         for viewTuple in views.enumerated().reversed() {
             // 判断界面内的红包的点击事件
-            if viewTuple.element.layer.presentation()?
-                .hitTest(touchPoint) != nil {
+            let hitTestSuccess = (viewTuple.element.layer.presentation()?
+                .hitTest(touchPoint) != nil)
+            if hitTestSuccess {
                 if viewTuple.element.tag == redPackCompomentTag {
                     // 点到的是红包,马上结束
                     redPackClickedCount += 1
@@ -423,6 +454,14 @@ public class RedpackRainView: UIView {
         }
     }
 
+    /// 暂停时间回溯
+    private func stopTimeBack() {
+        backTimetimer?.invalidate()
+        backTimetimer = nil
+        backTimeCount = 0.0
+        isInTimeBack = false
+    }
+
     // 暂停动画
     private func pauseLayer(layer: CALayer) {
         // notice: 不要乱调整代码顺序!
@@ -438,11 +477,16 @@ public class RedpackRainView: UIView {
     // 恢复动画
     private func resumeLayer(layer: CALayer) {
         let pausedTime = layer.timeOffset
-        layer.speed = 1.0;
-        layer.timeOffset = 0.0;
-        layer.beginTime = 0.0;
-        let timeSincePause = layer.convertTime(CACurrentMediaTime(), to: nil) - pausedTime;
+        layer.speed = 1.0
+        layer.timeOffset = 0.0
+        layer.beginTime = 0.0
+        let timeSincePause = layer.convertTime(CACurrentMediaTime(), to: nil) - pausedTime
         layer.beginTime = timeSincePause;
+    }
+
+    // 回溯动画的时间偏移量
+    private func timeBackLayer(layer: CALayer) {
+        layer.timeOffset = layer.timeOffset - self.backTimeCount
     }
 
     private func addRedPack() -> UIImageView {

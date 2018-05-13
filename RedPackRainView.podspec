@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "RedPackRainView"
-  s.version      = "6.0.1"
+  s.version      = "6.1.0"
   s.summary      = "红包雨的组件"
 
   # This description is used to generate tags and improve search results.
@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description  = <<-DESC
-                    红包雨的组件view
+                    红包雨的组件, 支持炸弹。暂停，时间倒流等功能。
                    DESC
 
   s.homepage     = "https://github.com/Orange-W/RedPackRain.git"

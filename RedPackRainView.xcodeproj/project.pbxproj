@@ -17,6 +17,11 @@
 		C215AF9B207DA96600F07EDF /* redpack2.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = C215AF9A207DA96600F07EDF /* redpack2.jpeg */; };
 		C215AF9D207DA96A00F07EDF /* redpack1.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = C215AF9C207DA96A00F07EDF /* redpack1.jpeg */; };
 		C215AF9F207DA96E00F07EDF /* redpack3.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = C215AF9E207DA96E00F07EDF /* redpack3.jpeg */; };
+		C281556020A83EC900573752 /* 下载2.png in Resources */ = {isa = PBXBuildFile; fileRef = C281555D20A83EC800573752 /* 下载2.png */; };
+		C281556120A83EC900573752 /* 下载1.png in Resources */ = {isa = PBXBuildFile; fileRef = C281555E20A83EC900573752 /* 下载1.png */; };
+		C281556220A83EC900573752 /* 下载.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = C281555F20A83EC900573752 /* 下载.jpeg */; };
+		C281556420A841F100573752 /* hit.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C281556320A841F100573752 /* hit.mp3 */; };
+		C281556620A8421800573752 /* boom.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = C281556520A8421800573752 /* boom.mp3 */; };
 		C2ECB9FF2089DA5400B5A6D8 /* bomb.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C2ECB9FE2089DA5400B5A6D8 /* bomb.jpg */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +50,11 @@
 		C215AF9A207DA96600F07EDF /* redpack2.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = redpack2.jpeg; sourceTree = "<group>"; };
 		C215AF9C207DA96A00F07EDF /* redpack1.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = redpack1.jpeg; sourceTree = "<group>"; };
 		C215AF9E207DA96E00F07EDF /* redpack3.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = redpack3.jpeg; sourceTree = "<group>"; };
+		C281555D20A83EC800573752 /* 下载2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "下载2.png"; sourceTree = "<group>"; };
+		C281555E20A83EC900573752 /* 下载1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "下载1.png"; sourceTree = "<group>"; };
+		C281555F20A83EC900573752 /* 下载.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "下载.jpeg"; sourceTree = "<group>"; };
+		C281556320A841F100573752 /* hit.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = hit.mp3; sourceTree = "<group>"; };
+		C281556520A8421800573752 /* boom.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = boom.mp3; sourceTree = "<group>"; };
 		C2ECB9FE2089DA5400B5A6D8 /* bomb.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bomb.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -92,6 +102,11 @@
 				C2ECB9FE2089DA5400B5A6D8 /* bomb.jpg */,
 				C215AF9C207DA96A00F07EDF /* redpack1.jpeg */,
 				C215AF9A207DA96600F07EDF /* redpack2.jpeg */,
+				C281555F20A83EC900573752 /* 下载.jpeg */,
+				C281555E20A83EC900573752 /* 下载1.png */,
+				C281556520A8421800573752 /* boom.mp3 */,
+				C281556320A841F100573752 /* hit.mp3 */,
+				C281555D20A83EC800573752 /* 下载2.png */,
 				C209AB2D207D9AE7007681AC /* AppDelegate.swift */,
 				C209AB2F207D9AE7007681AC /* ViewController.swift */,
 				C209AB31207D9AE7007681AC /* Main.storyboard */,
@@ -205,10 +220,15 @@
 				C2ECB9FF2089DA5400B5A6D8 /* bomb.jpg in Resources */,
 				C215AF9B207DA96600F07EDF /* redpack2.jpeg in Resources */,
 				C209AB38207D9AE7007681AC /* LaunchScreen.storyboard in Resources */,
+				C281556020A83EC900573752 /* 下载2.png in Resources */,
 				C209AB35207D9AE7007681AC /* Assets.xcassets in Resources */,
+				C281556220A83EC900573752 /* 下载.jpeg in Resources */,
+				C281556420A841F100573752 /* hit.mp3 in Resources */,
 				C215AF9F207DA96E00F07EDF /* redpack3.jpeg in Resources */,
 				C209AB33207D9AE7007681AC /* Main.storyboard in Resources */,
 				C215AF9D207DA96A00F07EDF /* redpack1.jpeg in Resources */,
+				C281556120A83EC900573752 /* 下载1.png in Resources */,
+				C281556620A8421800573752 /* boom.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
