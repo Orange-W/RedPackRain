@@ -26,7 +26,7 @@ class ViewController: UIViewController {
 
         // 初始化红包雨
         redPackRain.setRedPack(images:
-            [UIImage.init(named: "下载1.png")!], size: CGSize.init(width: 100, height: 100)) { (redPackView, clickview) in
+        [UIImage.init(named: "下载1.png")!], size: CGSize.init(width: 100, height: 100), totalTime: 60) { (redPackView, clickview) in
 
                 guard let layer = clickview.layer.presentation() else {
                     return
