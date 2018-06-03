@@ -132,7 +132,7 @@ public class RedpackRainView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: 启动函数
+    // MARK: 启动红包雨
     public func startGame(configBlock: ((RedpackRainView) -> Void)? = nil) {
         //防止timer重复添加
         resetValue()

@@ -151,6 +151,92 @@ public func endRain()
 
 
 
+## 游戏开始结束与暂停
+
+### 启动红包雨
+
+```swift
+    // MARK: 启动红包雨
+    public func startGame(configBlock: ((RedpackRainView) -> Void)? = nil) {
+        //防止timer重复添加
+        resetValue()
+        configBlock?(self)
+        self.timer =  Timer.scheduledTimer(timeInterval: minRedPackIntervalTime, target: self, selector: #selector(showRain), userInfo: "", repeats: true)
+    }
+```
+
+
+
+### 结束游戏
+
+```swift
+    /// 结束游戏
+    public func endGame() {
+        self.timer.invalidate()
+        // 清除界面红包和炸弹
+        clearAllBomb()
+        clearAllRedPack()
+        completeHandle?(self)
+    }
+```
+
+
+
+### 暂停红包雨
+
+```swift
+	/// 暂停红包雨
+    public func stopRain() {
+        self.timer.invalidate()
+        stopRedPack()
+        stopBomb()
+        stopTimeBack()
+    }
+```
+
+
+
+###  恢复游戏
+
+```
+/// 继续下落红包雨
+    public func continueRain() {
+        self.timer.invalidate()
+        stopTimeBack()
+        self.timer =  Timer.scheduledTimer(timeInterval: minRedPackIntervalTime, target: self, selector: #selector(showRain), userInfo: "", repeats: true)
+        resumeRedPack()
+        resumeBomb()
+    }
+```
+
+
+
+### 红包动画倒流
+
+```swift
+    public func timeBackRain() {
+        // 暂停红包雨
+        stopRain()
+        // 重置回溯参数
+        stopTimeBack()
+        // 标记当前状态 (为了下面判断 0.3 秒的延时)
+        isInTimeBack = true
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
+            if self.isInTimeBack {
+                self.backTimetimer = Timer.scheduledTimer(timeInterval: self.minRedPackIntervalTime, target: self, selector: #selector(self.backTime), userInfo: "", repeats: true)
+            }
+        }
+    }
+```
+
+
+
+![gif5新文件 (1).gif](https://upload-images.jianshu.io/upload_images/6837136-d8638ffe79eb3e89.gif?imageMogr2/auto-orient/strip)
+
+
+
+
+
 ## 代理说明
 
 ```swift
