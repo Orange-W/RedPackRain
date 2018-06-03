@@ -44,15 +44,24 @@ public class RedpackRainView: UIView {
     public let redPackCompomentTag = -999
     public let bombCompomentTag = -1000
 
+    // MARK: 红包配置
     /// 红包view列表
     public var redPackList: [UIImageView] = []
     public var redPackImages: [UIImage] = []
+    /// 红包总数
+    public private(set) var redPackAllCount = 0
+    /// 点中的红包数
+    public private(set) var redPackClickedCount = 0
+
 
     // MARK: 运行控制
     /// 定时器
     public var timer: Timer = Timer.init()
-    /// 是否开启点击穿透, 点击效果可以穿透上层的遮挡物
+
+    /// 是否开启点击穿透, 如果开启点击效果可以穿透上层的遮挡物 。
+    /// 开启后默认所有界面都会被穿透，除非将其添加入不可穿透列表。
     public var clickPenetrateEnable = false
+
     /// 红包雨持续总时间
     public var totalTime = 0.0
     /// 已执行时间
@@ -72,11 +81,6 @@ public class RedpackRainView: UIView {
         }
     }
 
-    // MARK: 红包配置
-    /// 红包总数
-    public private(set) var redPackAllCount = 0
-    /// 点中的红包数
-    public private(set) var redPackClickedCount = 0
 
     // MARK: 炸弹配置
     /// 炸弹密度,每10个红包一个炸弹

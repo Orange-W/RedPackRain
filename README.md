@@ -28,8 +28,12 @@ class ViewController: UIViewController {
             [UIImage.init(named: "redpack1.jpeg")!,
              UIImage.init(named: "redpack2.jpeg")!,
              UIImage.init(named: "redpack3.jpeg")!]) { (redPackView, clickview) in
-                print("累计\(redPackView.redPackClickedCount)个红包")
+                print("这是第\(redPackView.redPackClickedCount)个红包")
                 clickview.removeFromSuperview()
+				// 获取当前动画状态
+				guard let layer = clickView.layer.presentation() else {
+                	return
+            	}
         }
         
         // 设置红包结束回调
@@ -46,9 +50,9 @@ class ViewController: UIViewController {
 
 
 
-## Api介绍
+## 基础Api介绍
 
-#### 红包设置
+### 红包设置
 
 ```Swift
     /// 红包设置
@@ -71,6 +75,8 @@ class ViewController: UIViewController {
         clickedHandle: RedPackRainView.RedPackRainView.ClickHandle? = default)
 ```
 
+
+
 ### 红包雨结束时候的回调
 
 ```swift
@@ -80,6 +86,21 @@ class ViewController: UIViewController {
     public func setCompleteHandle(completeHandle: @escaping RedPackRainView.RedPackRainView.CompleteHandle)
 ```
 
+
+
+### 红包雨出现的回调
+
+```Swift
+    /// 红包出现的回调
+    ///
+    /// - Parameter completeHandle: 回调handle
+    public func setRedPackAppearHandle(handle: @escaping RedPackAppearHandle) {
+        self.redPackAppearHandle = handle
+    }
+```
+
+
+
 ### 开始和结束动画
 
 ```swift
@@ -88,3 +109,128 @@ public func beginToRain()
 /// 结束动画
 public func endRain()
 ```
+
+
+## 点击穿透功能
+
+### 把界面添加至点击不可穿透列表
+
+属性 `clickPenetrateEnable`: 是否开启点击穿透, 如果开启点击效果可以穿透上层的遮挡物 。开启后默认所有界面都会被穿透，除非将其添加入不可穿透列表。
+
+```swift
+    /// 添加不可点击, 不可穿透的 view, 点击后会阻挡点击效果。
+    /// 使用前先打开 clickPenetrateEnable 开关，否则不会执行任何操作。
+    /// 注意：会改变 view 的 tag 值
+    /// - Parameter views: 不想点击被穿透的 view 数组
+    public func addNotPenetrateViews(views:[UIView]) {
+        if clickPenetrateEnable {
+            for view in views {
+                view.tag = notPenetrateTag
+            }
+        }
+    }
+```
+
+### 从不可穿透列表中删除
+
+```swift
+    /// 删除 View 的不可点击特性
+    /// 使用前先打开 clickPenetrateEnable 开关，否则不会执行任何操作。
+    /// 注意：会改变 view 的 tag 值
+    /// - Parameter views: 去除不可点击穿透的 view 数组
+    public func removeNotPenetrateViews(views:[UIView]) {
+        if clickPenetrateEnable {
+            for view in views {
+                if view.tag == notPenetrateTag {
+                    view.tag = 0
+                }
+            }
+        }
+    }
+```
+
+
+
+## 代理说明
+
+```swift
+@objc protocol RedpackRainDelegate {
+    /// 红包出现
+    @objc optional func redpackDidAppear(rainView: RedpackRainView, redpack: UIView, index: Int) -> Void
+    /// 红包被点中
+    @objc optional func redpackDidClicked(rainView: RedpackRainView, redpack: UIView) -> Void
+
+    /// 炸弹出现
+    @objc optional func bombDidAppear(rainView: RedpackRainView, bomb: UIView, index: Int) -> Void
+    ///  炸弹被点中
+    @objc optional func bombDidClicked(rainView: RedpackRainView, bomb: UIView) -> Void
+}
+```
+
+
+
+## Public 属性说明
+
+### 红包配置
+
+```swift
+	// MARK: 红包配置
+	/// 红包view列表
+    public var redPackList: [UIImageView] = []
+    public var redPackImages: [UIImage] = []
+    /// 红包总数
+    public private(set) var redPackAllCount = 0
+    /// 点中的红包数
+    public private(set) var redPackClickedCount = 0
+```
+
+
+
+### 炸弹配置
+
+```Swift
+    // MARK: 炸弹配置
+    /// 炸弹密度,每10个红包一个炸弹
+    public var bombList: [UIImageView] = []
+    public var bombImages: [UIImage] = []
+    /// 炸弹频率,每x个红包出现一个炸弹,默认 0 则没有炸弹
+    public var bombDensity = 0
+    /// 炸弹总数计数器
+    public private(set) var bombAllCount = 0
+    /// 点中的炸弹数
+    public private(set) var bombClickedCount = 0
+```
+
+
+
+### 全局配置
+
+```swift
+// MARK: 运行控制
+    /// 定时器
+    public var timer: Timer = Timer.init()
+
+    /// 是否开启点击穿透, 如果开启点击效果可以穿透上层的遮挡物 。
+    /// 开启后默认所有界面都会被穿透，除非将其添加入不可穿透列表。
+    public var clickPenetrateEnable = false
+
+    /// 红包雨持续总时间
+    public var totalTime = 0.0
+    /// 已执行时间
+    public private(set) var runTimeTotal: Double = 0
+    /// 剩余时间
+    public var restTime: Double { return totalTime - runTimeTotal }
+    /// 最小红包间隔周期,0.01 秒
+    public let minRedPackIntervalTime = 0.01
+    /// 红包下落速度,到底部时间
+    public var redPackDropDownTime = 0.0
+    /// 发红包间隔时间
+    public var redPackIntervalTime = 0.0 {
+        didSet {
+            if redPackIntervalTime < 0.01 {
+                redPackIntervalTime = 0.01
+            }
+        }
+    }
+```
+
