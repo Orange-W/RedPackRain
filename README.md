@@ -231,7 +231,7 @@ public func endRain()
 
 
 
-![gif5新文件 (1).gif](https://upload-images.jianshu.io/upload_images/6837136-d8638ffe79eb3e89.gif?imageMogr2/auto-orient/strip)
+![红包雨效果.gif](https://github.com/Orange-W/RedPackRain/blob/master/gif/RedPack2.gif?raw=true)
 
 
 
