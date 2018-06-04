@@ -235,9 +235,11 @@ public class RedpackRainView: UIView {
     ///   - totalTime: 总动画时间
     ///   - clickedHandle: 点击红包回调
     /// 如果想改变轮播图片, 需要先停止播放,再改变播放
+    /// ```
     /// imgView.stopAnimating()
-    /// imgView.animationImages =  [...]
+    /// imgView.animationImages =  [UIImage(), ...]
     /// imgView.startAnimating()
+    /// ```
     public func setRedPack(
         images: [UIImage],
         size: CGSize? = nil,
